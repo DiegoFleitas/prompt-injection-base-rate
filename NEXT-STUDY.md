@@ -22,6 +22,29 @@ protocol gets pre-registered before data collection, like F1 did.
   clustered bootstrap (results file) widens the interval, and the same correction
   belongs in any follow-up.
 
+## What the sensitivity control changed (2026-10-26)
+
+`results/sensitivity-report.md` ran a positive control against the F1 instrument:
+constructed channel positives (P1) and 187 published InjecAgent payloads injected
+into 30 sampled documents (P2).
+
+- Channels are caught: 5/5 in P1 for tag chars, sneaky bits, bidi and
+  variation-selector runs; 30/30 in P2 when the payload is re-encoded into tags.
+- Visible payloads are not: 0/30 when the published payload is inserted
+  verbatim, and 0/5 for plain, base64 and emoji encodings. The pipeline only
+  inspects documents that already contain an invisible character, so **256/290
+  sampled documents (88.3%) had no route into D2 review at all**.
+
+Two consequences for the next study:
+
+1. **A prevalence study of visible indirect injection is a different study**, and
+   it cannot reuse this instrument. It needs a reader — human annotation of a
+   stratified sample, or a labelled classifier validated against human labels —
+   because "is there an instruction here?" is not a Unicode property.
+2. **The null in F1 is bounded, not global.** Any write-up must scope it to the
+   concealment channel: the channel was empty in documents that had one, which
+   is a statement about concealment, not about prompt injection in general.
+
 ## Proposed frames
 
 | Frame | Source | Why this frame |

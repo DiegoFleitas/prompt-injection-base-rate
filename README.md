@@ -106,6 +106,13 @@ comment or attribute concealment in F1 (WET is text, not DOM); multi-turn or
 tool-loop attacks; harm. One crawl, one seed, one extraction pipeline — this is
 "agent-ingest text", never "the web".
 
+**And, measured by the sensitivity control** (`results/sensitivity-report.md`):
+the detector only inspects documents that carry an invisible character, so 256
+of 290 sampled documents (88.3%) had no route into D2 review at all. A visible
+instruction, or one encoded in base64 or emoji, is invisible to this instrument
+by construction. D2 = 0 means "the concealment channel was empty in the documents
+that had one" — not "no instructions were found on the web".
+
 ## Layout
 
 | Path | Purpose |
@@ -116,6 +123,7 @@ tool-loop attacks; harm. One crawl, one seed, one extraction pipeline — this i
 | `NEXT-STUDY.md` | design sketch for the frame that would decide the question (agent-fetched content, markup surfaces) |
 | `deviations.md` | pre-data changes and run log |
 | `scripts/` | sampler, sheet generator, summarizer, analysis, selftest |
+| `scripts/sensitivity/` | positive control: constructed channels (P1) + InjecAgent and BIPIA payloads (P2/P2b), see `results/sensitivity-report.md` |
 | `scripts/f4/` | **scaffold, unrun**: rendered-concealment frame (VM + Playwright) |
 | `data/`, `sheet/`, `labels.csv` | local only, git-ignored |
 

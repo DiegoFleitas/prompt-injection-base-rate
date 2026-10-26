@@ -184,4 +184,6 @@ function main() {
   console.log("labels.csv still needs a human, and the sheet is still the thing to read.");
 }
 
-main();
+if (require.main === module) main();
+
+module.exports = { classify };
