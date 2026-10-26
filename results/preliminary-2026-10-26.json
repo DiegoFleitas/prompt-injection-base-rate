@@ -1,0 +1,45 @@
+{
+  "generatedAt": "2026-10-26T17:18:36.310Z",
+  "frame": "F1-wet (Common Crawl plain-text extraction)",
+  "n": 290,
+  "domains": 275,
+  "warcFiles": 29,
+  "chars": {
+    "p50": 1480,
+    "p90": 5616,
+    "max": 54589
+  },
+  "d1": {
+    "count": 34,
+    "prevalencePct": 11.7,
+    "ci95Pct": [
+      8.5,
+      15.9
+    ]
+  },
+  "d1KindsPerRecord": {
+    "ZWSP": 9,
+    "BOM": 17,
+    "VS": 6,
+    "WJ": 1,
+    "DEFAULT-IGNORABLE": 1
+  },
+  "detector": {
+    "flagged": 0,
+    "flagRatePct": 0,
+    "ci95Pct": [
+      0,
+      1.3
+    ],
+    "verdicts": {
+      "clean": 93,
+      "noise": 197
+    },
+    "findingTypes": {
+      "mixed-script": 191,
+      "invisible": 28,
+      "encoded-spaced-hex": 1
+    }
+  },
+  "note": "D1 is mechanical (invisible code points). D2 needs human labels; see scripts/analyze.js."
+}

@@ -1,0 +1,10 @@
+# Local data — never published.
+# The sample contains raw page text (copyright, and potentially personal data),
+# and the sheets contain the same text with invisible code points made visible.
+data/
+sheet/
+labels.csv
+report.md
+
+# tooling
+node_modules/
