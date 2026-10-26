@@ -25,5 +25,23 @@ Detector verdicts: clean 93, noise 197
 
 Detector finding types: mixed-script 191, invisible 28, encoded-spaced-hex 1
 
+## Language coverage (script census)
+
+Scripts, not languages: a cheap proxy for what the sample covers.
+
+Records containing a non-Latin script: **231/290 = 79.7%**
+
+| Script | Records |
+| --- | ---: |
+| Han | 205 |
+| Hiragana/Katakana | 40 |
+| Cyrillic | 19 |
+| Hangul | 10 |
+| Greek | 7 |
+
+This multilingual sample matters for reading the detector column: a
+mixed-script heuristic fires on a multilingual page by construction, so its
+rate here says more about the sample's script mix than about threats.
+
 D2 (concealed instruction) is not measured here: it requires the human
 annotation in `labels.csv` and the pre-registered rule in `scripts/analyze.js`.

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-26T17:18:36.310Z",
+  "generatedAt": "2026-10-26T17:38:32.609Z",
   "frame": "F1-wet (Common Crawl plain-text extraction)",
   "n": 290,
   "domains": 275,
@@ -23,6 +23,17 @@
     "VS": 6,
     "WJ": 1,
     "DEFAULT-IGNORABLE": 1
+  },
+  "scripts": {
+    "recordsWithNonLatinScript": 231,
+    "perScriptRecords": {
+      "Han": 205,
+      "Hiragana/Katakana": 40,
+      "Cyrillic": 19,
+      "Greek": 7,
+      "Hangul": 10
+    },
+    "note": "script census as a language-coverage proxy; languages themselves are not identified"
   },
   "detector": {
     "flagged": 0,

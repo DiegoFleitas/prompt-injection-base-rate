@@ -83,6 +83,35 @@ function main() {
   const d1ci = wilson(d1, n);
   const flagci = wilson(flagged, n);
 
+  // Language coverage proxy: which scripts appear. ACL/ARR responsible-research
+  // checklists ask for the languages an artifact covers; a script census is a
+  // cheap, honest approximation. It also explains the detector's `mixed-script`
+  // finding rate: a sample this multilingual trips a mixed-script heuristic by
+  // construction.
+  const SCRIPT_RANGES = {
+    Han: [0x3400, 0x9fff],
+    "Hiragana/Katakana": [0x3040, 0x30ff],
+    Hangul: [0xac00, 0xd7af],
+    Cyrillic: [0x0400, 0x04ff],
+    Arabic: [0x0600, 0x06ff],
+    Devanagari: [0x0900, 0x097f],
+    Greek: [0x0370, 0x03ff],
+    Thai: [0x0e00, 0x0e7f],
+  };
+  const scriptCounts = {};
+  let recordsWithNonLatin = 0;
+  for (const record of records) {
+    const seen = new Set();
+    for (const ch of record.text) {
+      const cp = ch.codePointAt(0);
+      for (const [name, [lo, hi]] of Object.entries(SCRIPT_RANGES)) {
+        if (cp >= lo && cp <= hi) seen.add(name);
+      }
+    }
+    if (seen.size) recordsWithNonLatin += 1;
+    for (const name of seen) scriptCounts[name] = (scriptCounts[name] || 0) + 1;
+  }
+
   const summary = {
     generatedAt: new Date().toISOString(),
     frame: "F1-wet (Common Crawl plain-text extraction)",
@@ -96,6 +125,11 @@ function main() {
     },
     d1: { count: d1, prevalencePct: pct(d1ci.p), ci95Pct: [pct(d1ci.lo), pct(d1ci.hi)] },
     d1KindsPerRecord: kinds,
+    scripts: {
+      recordsWithNonLatinScript: recordsWithNonLatin,
+      perScriptRecords: scriptCounts,
+      note: "script census as a language-coverage proxy; languages themselves are not identified",
+    },
     detector: {
       flagged,
       flagRatePct: pct(flagci.p),
@@ -143,6 +177,22 @@ function main() {
           .map(([type, count]) => `${type} ${count}`)
           .join(", ") || "none"),
       "",
+      "## Language coverage (script census)",
+      "",
+      "Scripts, not languages: a cheap proxy for what the sample covers.",
+      "",
+      `Records containing a non-Latin script: **${recordsWithNonLatin}/${n} = ${pct(recordsWithNonLatin / n)}%**`,
+      "",
+      "| Script | Records |",
+      "| --- | ---: |",
+      ...Object.entries(scriptCounts)
+        .sort((a, b) => b[1] - a[1])
+        .map(([script, count]) => `| ${script} | ${count} |`),
+      "",
+      "This multilingual sample matters for reading the detector column: a",
+      "mixed-script heuristic fires on a multilingual page by construction, so its",
+      "rate here says more about the sample's script mix than about threats.",
+      "",
       "D2 (concealed instruction) is not measured here: it requires the human",
       "annotation in `labels.csv` and the pre-registered rule in `scripts/analyze.js`.",
       "",
@@ -152,6 +202,7 @@ function main() {
   console.log(`n=${n} domains=${domains} files=${warcFiles}`);
   console.log(`D1 ${d1}/${n} = ${pct(d1ci.p)}% (${pct(d1ci.lo)}–${pct(d1ci.hi)})`);
   console.log(`detector flagged ${flagged}/${n} = ${pct(flagci.p)}%`);
+  console.log(`non-Latin script records ${recordsWithNonLatin}/${n}`);
   console.log(`wrote ${OUT}.json and ${OUT}.md`);
 }
 

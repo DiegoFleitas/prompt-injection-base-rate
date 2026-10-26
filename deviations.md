@@ -39,6 +39,23 @@ selection. The shortfall is recorded and the analysis uses the actual N.
 - D2 not yet adjudicated at the time of `preliminary-report.md`.
 - No protocol changes were made after the first record was fetched.
 
+## Additions after the first descriptive report
+
+These add documentation and one corrected reading; no analytic decision changed.
+
+1. **Script census added to `summarize.js`** because the ACL-ARR responsible
+   research checklist (B5) asks for language coverage. Result: 231/290 records
+   (79.7%) contain a non-Latin script — Han 205, Hiragana/Katakana 40, Cyrillic
+   19, Hangul 10, Greek 7. Languages are still not identified.
+2. **Reading of `mixed-script` corrected in the README**: with 79.7% of the
+   sample in non-Latin scripts, that heuristic fires by construction, so its
+   count describes the sample's script mix rather than any threat. The earlier
+   prose implied otherwise by leaving the connection implicit.
+3. **`RESPONSIBLE-RESEARCH.md` added**: an item-by-item self-audit against the
+   ACL-ARR checklist, including the gaps (D2 unmeasured, languages unidentified,
+   one crawl, no formal dual-use assessment, no PII scan — justified by not
+   publishing text) and the AI-assistant disclosure (E1).
+
 ## Known limitations carried forward
 
 - 0 flags of 290 means FPR is not estimable; the pre-registered rule returns K3
@@ -47,3 +64,4 @@ selection. The shortfall is recorded and the analysis uses the actual N.
   unrun and are VM-only.
 - One crawl, one PRNG seed, one extraction pipeline. Reported as "agent-ingest
   text", never "the web".
+- Languages are not identified, only scripts.

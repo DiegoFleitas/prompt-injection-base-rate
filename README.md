@@ -31,6 +31,14 @@ overrides.
 keyed on it has no operating point on real traffic: it is either silent or it is
 reporting that a page is not monolingual Latin.
 
+One caveat that explains the last row of the table: the sample is multilingual —
+**231 of 290 records (79.7%) contain a non-Latin script**, mostly Han (205). A
+`mixed-script` heuristic fires on a multilingual page by construction, so that
+count says more about the sample than about threats. Language coverage is
+reported as a script census because languages themselves are not identified; see
+[`RESPONSIBLE-RESEARCH.md`](RESPONSIBLE-RESEARCH.md) for that gap and the rest of
+the self-audit against the ACL-ARR responsible-research checklist.
+
 D2 (a concealed *instruction*) is measured by human adjudication of the 34
 candidates against a definition frozen before data collection; see `protocol.md`
 §3–4 and `results/`. The pre-registered decision rule (§6) is applied by
@@ -82,6 +90,7 @@ tool-loop attacks; harm. One crawl, one seed, one extraction pipeline — this i
 | --- | --- |
 | `protocol.md` | frozen pre-registered design, definitions, kill criterion |
 | `results/` | descriptive numbers + the narrative preliminary report |
+| `RESPONSIBLE-RESEARCH.md` | self-audit against the ACL-ARR responsible-research checklist |
 | `deviations.md` | pre-data changes and run log |
 | `scripts/` | sampler, sheet generator, summarizer, analysis, selftest |
 | `data/`, `sheet/`, `labels.csv` | local only, git-ignored |
