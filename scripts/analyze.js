@@ -81,6 +81,13 @@ function main() {
   const flaggedRows = labelled.filter((row) => flagByid.get(row.id)?.flagged === "1");
   const falsePositives = flaggedRows.filter((row) => row.d2_concealed_instruction !== "1").length;
 
+  // TODO(annotation run): these are Wilson intervals, which assume independent
+  // records. The sample is domain-clustered (290 records, 275 domains, mirrored
+  // pages), and `scripts/summarize.js` already corrects for that with a
+  // domain-clustered bootstrap. When labels.csv is filled, the D2 interval must
+  // be re-estimated the same way — carry the bootstrap in from summarize.js
+  // rather than reporting a Wilson interval that is too narrow. Recorded as a
+  // known gap in RESPONSIBLE-RESEARCH.md.
   const pInstr = wilson(d2, n);
   const pAny = wilson(d1, n);
   const fp = wilson(falsePositives, flaggedRows.length);

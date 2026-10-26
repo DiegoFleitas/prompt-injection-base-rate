@@ -31,6 +31,11 @@ Produced by `node scripts/analyze.js` (do not hand-copy — paste its table):
 | D3 (directive, no action) | [x / 34] |
 | Detector flagged | 0 / 290 |
 
+> **Interval note.** Do not report a Wilson interval for D2. The sample is
+> clustered (290 records, 275 domains), so the interval has to be a
+> **domain-clustered bootstrap**, exactly as `summarize.js` does for D1. Paste the
+> clustered numbers here, not the classic ones.
+
 ## The D2 positives, if any
 
 One row per positive. **No raw page text** — id, mechanism, and a one-line
