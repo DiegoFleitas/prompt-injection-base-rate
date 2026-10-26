@@ -91,11 +91,23 @@ These add documentation and one corrected reading; no analytic decision changed.
     with the design requirements F1 taught us — language ID instead of script,
     site-type stratification, clustered intervals, and a comparator that works
     when the detector is silent.
+11. **Sensitivity control added after the study ran**: `results/sensitivity-protocol.md`
+    was frozen before any positive control was executed, but the control as a whole
+    is an addition to `protocol.md` v1.2, not part of the original design. P2b (bare
+    instruction payloads from InjecAgent + BIPIA) was run after P2 and is declared
+    as an amendment in the report; P2 stands on its own. Consequence recorded in
+    the report, the README and `RESPONSIBLE-RESEARCH.md`: D2 = 0 is scoped to
+    documents that contain an invisible character, and 256 of 290 documents were
+    never in D2 scope at all.
 
 ## Known limitations carried forward
 
 - 0 flags of 290 means FPR is not estimable; the pre-registered rule returns K3
-  rather than a decision.
+  rather than a decision. The sensitivity control bounds what the detector would
+  have caught, but it cannot substitute for an FPR.
+- The instrument only inspects documents with an invisible character: visible
+  instructions and visible encodings (base64, emoji) are outside its reach by
+  construction, and 88.3% of the sample was never examined for D2.
 - WET cannot see comments, attributes, or CSS-hidden text; frames F3/F4 remain
   unrun and are VM-only.
 - One crawl, one PRNG seed, one extraction pipeline. Reported as "agent-ingest
