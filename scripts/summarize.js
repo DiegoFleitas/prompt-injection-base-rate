@@ -112,6 +112,42 @@ function main() {
     for (const name of seen) scriptCounts[name] = (scriptCounts[name] || 0) + 1;
   }
 
+  // Stratified D1: does the headline hold across the script split? If most
+  // concealment sits in the non-Latin half, the aggregate overstates what a
+  // Latin-script reader's pipeline sees — and the responsible move is to report
+  // both numbers rather than the flattering one.
+  const d1Ids = new Set(candidates.map((row) => row[0]));
+  const strata = {
+    "non-Latin script": { n: 0, d1: 0 },
+    "Latin-only": { n: 0, d1: 0 },
+  };
+  for (const record of records) {
+    const seen = new Set();
+    for (const ch of record.text) {
+      const cp = ch.codePointAt(0);
+      for (const [name, [lo, hi]] of Object.entries(SCRIPT_RANGES)) {
+        if (cp >= lo && cp <= hi) seen.add(name);
+      }
+    }
+    const key = seen.size ? "non-Latin script" : "Latin-only";
+    strata[key].n += 1;
+    if (d1Ids.has(record.id)) strata[key].d1 += 1;
+  }
+  const stratifiedD1 = Object.fromEntries(
+    Object.entries(strata).map(([key, value]) => {
+      const interval = wilson(value.d1, value.n);
+      return [
+        key,
+        {
+          n: value.n,
+          d1: value.d1,
+          prevalencePct: pct(interval.p),
+          ci95Pct: [pct(interval.lo), pct(interval.hi)],
+        },
+      ];
+    })
+  );
+
   const summary = {
     generatedAt: new Date().toISOString(),
     frame: "F1-wet (Common Crawl plain-text extraction)",
@@ -124,6 +160,7 @@ function main() {
       max: chars[n - 1],
     },
     d1: { count: d1, prevalencePct: pct(d1ci.p), ci95Pct: [pct(d1ci.lo), pct(d1ci.hi)] },
+    stratifiedD1,
     d1KindsPerRecord: kinds,
     scripts: {
       recordsWithNonLatinScript: recordsWithNonLatin,
@@ -193,6 +230,19 @@ function main() {
       "mixed-script heuristic fires on a multilingual page by construction, so its",
       "rate here says more about the sample's script mix than about threats.",
       "",
+      "### D1 stratified by script",
+      "",
+      "The aggregate hides a split: concealment is far more common in the non-Latin",
+      "half of the sample, so the headline overstates what a Latin-script pipeline",
+      "typically meets.",
+      "",
+      "| Stratum | n | D1 | Prevalence |",
+      "| --- | ---: | ---: | --- |",
+      ...Object.entries(stratifiedD1).map(
+        ([stratum, value]) =>
+          `| ${stratum} | ${value.n} | ${value.d1} | ${value.prevalencePct}% (95% CI ${value.ci95Pct[0]}–${value.ci95Pct[1]}%) |`
+      ),
+      "",
       "D2 (concealed instruction) is not measured here: it requires the human",
       "annotation in `labels.csv` and the pre-registered rule in `scripts/analyze.js`.",
       "",
@@ -203,6 +253,9 @@ function main() {
   console.log(`D1 ${d1}/${n} = ${pct(d1ci.p)}% (${pct(d1ci.lo)}–${pct(d1ci.hi)})`);
   console.log(`detector flagged ${flagged}/${n} = ${pct(flagci.p)}%`);
   console.log(`non-Latin script records ${recordsWithNonLatin}/${n}`);
+  for (const [stratum, value] of Object.entries(stratifiedD1)) {
+    console.log(`  D1 ${stratum}: ${value.d1}/${value.n} = ${value.prevalencePct}%`);
+  }
   console.log(`wrote ${OUT}.json and ${OUT}.md`);
 }
 

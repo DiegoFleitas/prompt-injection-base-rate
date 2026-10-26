@@ -31,11 +31,22 @@ overrides.
 keyed on it has no operating point on real traffic: it is either silent or it is
 reporting that a page is not monolingual Latin.
 
-One caveat that explains the last row of the table: the sample is multilingual —
-**231 of 290 records (79.7%) contain a non-Latin script**, mostly Han (205). A
-`mixed-script` heuristic fires on a multilingual page by construction, so that
-count says more about the sample than about threats. Language coverage is
-reported as a script census because languages themselves are not identified; see
+One caveat that explains the last row of the table, and that materially changes how
+the headline should be read: the sample is multilingual — **231 of 290 records
+(79.7%) contain a non-Latin script**, mostly Han (205) — and concealment is
+concentrated in that half. Stratified:
+
+| Stratum | n | D1 records | Prevalence |
+| --- | ---: | ---: | --- |
+| non-Latin script | 231 | 32 | 13.9% (95% CI 10–18.9%) |
+| Latin-only | 59 | 2 | 3.4% (95% CI 0.9–11.5%) |
+
+So the headline 11.7% overstates what a Latin-script pipeline meets; **3.4% is
+the closer number for an English-language agent**, though "Latin script" is not
+"English" and the stratum is small, hence the wide interval. The same script mix
+explains the `mixed-script` count (191): that heuristic fires on a multilingual
+page by construction, so it describes the sample rather than a threat. Language
+coverage here is a script census, not language identification — see
 [`RESPONSIBLE-RESEARCH.md`](RESPONSIBLE-RESEARCH.md) for that gap and the rest of
 the self-audit against the ACL-ARR responsible-research checklist.
 

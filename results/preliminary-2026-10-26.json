@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-26T17:38:32.609Z",
+  "generatedAt": "2026-10-26T17:40:17.615Z",
   "frame": "F1-wet (Common Crawl plain-text extraction)",
   "n": 290,
   "domains": 275,
@@ -16,6 +16,26 @@
       8.5,
       15.9
     ]
+  },
+  "stratifiedD1": {
+    "non-Latin script": {
+      "n": 231,
+      "d1": 32,
+      "prevalencePct": 13.9,
+      "ci95Pct": [
+        10,
+        18.9
+      ]
+    },
+    "Latin-only": {
+      "n": 59,
+      "d1": 2,
+      "prevalencePct": 3.4,
+      "ci95Pct": [
+        0.9,
+        11.5
+      ]
+    }
   },
   "d1KindsPerRecord": {
     "ZWSP": 9,

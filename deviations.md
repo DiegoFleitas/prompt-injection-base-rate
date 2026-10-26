@@ -55,6 +55,13 @@ These add documentation and one corrected reading; no analytic decision changed.
    ACL-ARR checklist, including the gaps (D2 unmeasured, languages unidentified,
    one crawl, no formal dual-use assessment, no PII scan — justified by not
    publishing text) and the AI-assistant disclosure (E1).
+4. **D1 stratified by script, added to `summarize.js` and the README.** The
+   aggregate rate is 11.7%, but it is concentrated in the non-Latin half of the
+   sample: 32/231 = 13.9% (95% CI 10–18.9%) versus 2/59 = 3.4% (95% CI 0.9–11.5%)
+   among Latin-only records. Reporting only the aggregate would overstate what a
+   Latin-script (closest proxy for English) pipeline meets. This is a reporting
+   correction, not a change to the pre-registered decision rule; the detector flag
+   rate is 0/290 in every stratum, so K3 is unaffected.
 
 ## Known limitations carried forward
 

@@ -43,5 +43,16 @@ This multilingual sample matters for reading the detector column: a
 mixed-script heuristic fires on a multilingual page by construction, so its
 rate here says more about the sample's script mix than about threats.
 
+### D1 stratified by script
+
+The aggregate hides a split: concealment is far more common in the non-Latin
+half of the sample, so the headline overstates what a Latin-script pipeline
+typically meets.
+
+| Stratum | n | D1 | Prevalence |
+| --- | ---: | ---: | --- |
+| non-Latin script | 231 | 32 | 13.9% (95% CI 10–18.9%) |
+| Latin-only | 59 | 2 | 3.4% (95% CI 0.9–11.5%) |
+
 D2 (concealed instruction) is not measured here: it requires the human
 annotation in `labels.csv` and the pre-registered rule in `scripts/analyze.js`.
