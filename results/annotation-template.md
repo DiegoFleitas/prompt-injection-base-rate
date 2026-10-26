@@ -1,5 +1,8 @@
 # D2 report — template (fill after annotation)
 
+> New to this pass? Read `annotation-walkthrough.md` first: it works through the
+> three pages that need close reading and shows the exact CSV shape.
+
 **Status:** template, not filled. Delete this line and the bracketed prompts when
 the 34 candidates are adjudicated.
 
