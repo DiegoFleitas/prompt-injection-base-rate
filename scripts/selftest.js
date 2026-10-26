@@ -9,7 +9,7 @@
  * Exists because the first version of make-sheet.js classified almost every
  * character as invisible: a hand-written character class
  * `/[\uFE00-\uFE0F\uE0100-\uE01EF]/u` parses `\uE0100` as `\uE010` + "0", which
- * turns part of the class into the range 0x30â€“0xE01E. That bug would have
+ * turns part of the class into the range 0x30–0xE01E. That bug would have
  * reported ~100% concealed-text prevalence. A three-line test prevents it.
  *
  * No network, no model, no fixture files.
@@ -29,8 +29,8 @@ function kindOf(ch) {
 }
 
 // Ordinary characters must never be classified as invisible. This is the exact
-// bug above: "s", "a", "0", "F" and "â˜…" were all "VS" under the broken class.
-for (const ch of ["s", "a", "0", "F", "-", " ", "â˜…", "7", "Ã©", "ä¸­"]) {
+// bug above: "s", "a", "0", "F" and "★" were all "VS" under the broken class.
+for (const ch of ["s", "a", "0", "F", "-", " ", "★", "7", "é", "中"]) {
   assert.equal(kindOf(ch), null, `${JSON.stringify(ch)} must not be invisible`);
 }
 
@@ -67,6 +67,33 @@ assert.ok(all.lo > 0.98, "300/300 lower bound");
 const half = wilson(150, 300);
 assert.ok(Math.abs(half.p - 0.5) < 1e-9 && half.lo < 0.5 && half.hi > 0.5, "50% interval");
 assert.equal(wilson(0, 0).hi, 1, "empty sample");
+
+// Encoding guard: a UTF-8 file decoded as cp1252 leaves mojibake behind, and a
+// lossy read leaves U+FFFD. This fired for real — three published files carried
+// it before this assertion existed. The pattern is written with escapes only, so
+// this file does not match itself: a mojibake run starts with a Latin-1 lead
+// character (U+00C2..U+00E5) followed by another cp1252 punctuation or a high
+// byte, which correct text (>=, <=, subset, em dash) never does.
+const fs = require("node:fs");
+const MOJIBAKE = /[\u00C2-\u00E5][\u0080-\u00BF]|[\u00C2-\u00E5][\u2010-\u2122]|\uFFFD/;
+const ROOT = path.join(__dirname, "..");
+const SKIP_DIRS = new Set(["node_modules", ".git", "data", "sheet", "test-results"]);
+const TEXT_EXT = new Set([".md", ".js", ".json", ".csv", ".txt", ".yaml", ".yml"]);
+const offenders = [];
+(function walk(dir) {
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    if (entry.isDirectory()) {
+      if (!SKIP_DIRS.has(entry.name)) walk(path.join(dir, entry.name));
+      continue;
+    }
+    if (!TEXT_EXT.has(path.extname(entry.name).toLowerCase())) continue;
+    const file = path.join(dir, entry.name);
+    fs.readFileSync(file, "utf8").split("\n").forEach((line, index) => {
+      if (MOJIBAKE.test(line)) offenders.push(`${path.relative(ROOT, file)}:${index + 1}`);
+    });
+  }
+})(ROOT);
+assert.deepEqual(offenders, [], `mojibake or U+FFFD in: ${offenders.slice(0, 8).join(", ")}`);
 
 console.log("selftest: all assertions passed");
 
