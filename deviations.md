@@ -62,6 +62,19 @@ These add documentation and one corrected reading; no analytic decision changed.
    Latin-script (closest proxy for English) pipeline meets. This is a reporting
    correction, not a change to the pre-registered decision rule; the detector flag
    rate is 0/290 in every stratum, so K3 is unaffected.
+5. **Decision-rule applicability recorded.** Because 0/290 records were flagged,
+   the false-positive rate is undefined rather than small, so K1/K2 are not just
+   unmet but *inapplicable*. `analyze.js` now reports this as **K3 (structural)**
+   with its own message, and `RESPONSIBLE-RESEARCH.md` records it as a limitation
+   of the rule. No protocol edit: the rule is frozen, and the inapplicability is
+   a result about the detector, not a change to the criterion.
+6. **F4 scaffold added, unrun** (`scripts/f4/`, with its own README and safety
+   checklist). The protocol already lists F4 as a deferred frame; this only makes
+   the instrumentation reviewable before anyone runs it. It needs a VM with
+   Playwright; no number exists yet and none is claimed.
+7. **D2 report template added** (`results/annotation-template.md`) so the
+   annotation pass has a fixed output shape — including the instruction not to
+   substitute a guessed FPR if the formal rule cannot fire.
 
 ## Known limitations carried forward
 

@@ -102,6 +102,14 @@ function main() {
   if (!n) {
     verdict = "INCOMPLETE — no labelled records yet.";
     rule = "Finish labels.csv first.";
+  } else if (!canEstimateFpr && flaggedRows.length === 0) {
+    // This is not "inconclusive because we need more data" in the ordinary
+    // sense: the detector emitted no flags at all, so it has no operating point
+    // on this frame and no FPR exists to compare against. Recorded separately so
+    // the K3 is not mistaken for a near-miss.
+    verdict =
+      "K3 (structural) — the detector has no operating point on this frame, so neither K1 nor K2 is evaluable.";
+    rule = `0 of ${n} records were flagged, so FPR is undefined rather than small. The decision rule needs a detector that fires; report the descriptive result and treat K1/K2 as inapplicable unless F3/F4 produce flags.`;
   } else if (!canEstimateFpr) {
     verdict = "K3 — inconclusive: too few detector flags to estimate a false-positive rate.";
     rule = `only ${flaggedRows.length} flagged record(s); at least ${MIN_FLAGS_FOR_FPR} are needed for an FPR-based decision. Run F3/F4 or a larger F1 sample before deciding.`;

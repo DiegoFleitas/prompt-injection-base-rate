@@ -129,6 +129,25 @@ injection:
   was wrong, it is recorded in `deviations.md` (for example, a mis-parsed
   character class that would have reported ~100% prevalence).
 
+## Decision-rule applicability (A1-adjacent, recorded post hoc)
+
+The pre-registered K1/K2 comparison in `protocol.md` §6 needs a **false-positive
+rate**, and an FPR needs flags: `analyze.js` requires at least 10. On this frame
+the detector flagged **0 of 290** records, so:
+
+- the FPR is **undefined**, not small;
+- K1 and K2 are therefore not just unmet but **inapplicable**;
+- the returned verdict is **K3 (structural)**, and `analyze.js` says so
+  explicitly rather than reporting the same "need more data" message it uses for
+  a small number of flags.
+
+This is a limitation of the decision rule, not a loophole: the rule assumed a
+detector with an operating point. What it actually demonstrates is that on
+agent-ingest text the tool never reaches a verdict, which is itself the finding.
+A future version of the protocol should pre-register a comparator that works when
+the detector is silent — for example "prevalence below the practical floor for a
+human review queue" — instead of an FPR ratio.
+
 ## Known gaps, in one place
 
 1. D2 is unmeasured until the 34 candidates are annotated.
@@ -136,3 +155,5 @@ injection:
 3. Sampling variability across crawls is unmeasured — one crawl, one draw.
 4. No formal dual-use harm assessment beyond the A2 paragraphs.
 5. No PII scan, justified by not publishing text.
+6. The pre-registered K1/K2 rule is inapplicable on F1 (0 flags ⇒ no FPR); see
+   "Decision-rule applicability".

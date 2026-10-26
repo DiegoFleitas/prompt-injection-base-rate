@@ -100,10 +100,11 @@ tool-loop attacks; harm. One crawl, one seed, one extraction pipeline — this i
 | Path | Purpose |
 | --- | --- |
 | `protocol.md` | frozen pre-registered design, definitions, kill criterion |
-| `results/` | descriptive numbers + the narrative preliminary report |
+| `results/` | descriptive numbers, the narrative report, and the D2 report template |
 | `RESPONSIBLE-RESEARCH.md` | self-audit against the ACL-ARR responsible-research checklist |
 | `deviations.md` | pre-data changes and run log |
 | `scripts/` | sampler, sheet generator, summarizer, analysis, selftest |
+| `scripts/f4/` | **scaffold, unrun**: rendered-concealment frame (VM + Playwright) |
 | `data/`, `sheet/`, `labels.csv` | local only, git-ignored |
 
 ## License
