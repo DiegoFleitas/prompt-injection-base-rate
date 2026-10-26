@@ -54,5 +54,21 @@ typically meets.
 | non-Latin script | 231 | 32 | 13.9% (95% CI 10–18.9%) |
 | Latin-only | 59 | 2 | 3.4% (95% CI 0.9–11.5%) |
 
+### Intervals that account for clustering
+
+The Wilson intervals above assume the 290 records are independent. They are
+not: the sample holds 275 domains and includes mirrored or near-duplicate
+pages, so those intervals are too narrow. Resampling **domains** (not records)
+for a 95% interval:
+
+| Stratum | Domains | Prevalence | Clustered 95% CI |
+| --- | ---: | ---: | --- |
+| overall | 275 | 11.7% | 8.1–15.6% |
+| non-Latin script | 220 | 13.9% | 9.4–18.7% |
+| Latin-only | 55 | 3.4% | 0–8.8% |
+
+Bootstrap: 2000 replicas, seed 20261026. Same seed, same
+interval — the number does not move between runs.
+
 D2 (concealed instruction) is not measured here: it requires the human
 annotation in `labels.csv` and the pre-registered rule in `scripts/analyze.js`.

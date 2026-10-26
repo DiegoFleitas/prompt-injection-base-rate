@@ -43,12 +43,17 @@ concentrated in that half. Stratified:
 
 So the headline 11.7% overstates what a Latin-script pipeline meets; **3.4% is
 the closer number for an English-language agent**, though "Latin script" is not
-"English" and the stratum is small, hence the wide interval. The same script mix
-explains the `mixed-script` count (191): that heuristic fires on a multilingual
-page by construction, so it describes the sample rather than a threat. Language
-coverage here is a script census, not language identification — see
-[`RESPONSIBLE-RESEARCH.md`](RESPONSIBLE-RESEARCH.md) for that gap and the rest of
-the self-audit against the ACL-ARR responsible-research checklist.
+"English" and the stratum is small, hence the wide interval. Those intervals
+assume independent records, which they are not — 290 records over 275 domains
+include mirrored pages. A **domain-clustered bootstrap** gives 11.7% (8.1–15.6),
+13.9% (9.4–18.7) and 3.4% (0–8.8); that is the honest version. The same script
+mix explains the `mixed-script` count (191): that heuristic fires on a
+multilingual page by construction, so it describes the sample rather than a
+threat. Language coverage here is a script census, not language identification —
+see [`RESPONSIBLE-RESEARCH.md`](RESPONSIBLE-RESEARCH.md) for that gap and the rest
+of the self-audit against the ACL-ARR responsible-research checklist, and
+[`NEXT-STUDY.md`](NEXT-STUDY.md) for the frame that would actually decide the
+question.
 
 D2 (a concealed *instruction*) is measured by human adjudication of the 34
 candidates against a definition frozen before data collection; see `protocol.md`
@@ -108,6 +113,7 @@ tool-loop attacks; harm. One crawl, one seed, one extraction pipeline — this i
 | `protocol.md` | frozen pre-registered design, definitions, kill criterion |
 | `results/` | descriptive numbers, the narrative report, and the D2 report template |
 | `RESPONSIBLE-RESEARCH.md` | self-audit against the ACL-ARR responsible-research checklist |
+| `NEXT-STUDY.md` | design sketch for the frame that would decide the question (agent-fetched content, markup surfaces) |
 | `deviations.md` | pre-data changes and run log |
 | `scripts/` | sampler, sheet generator, summarizer, analysis, selftest |
 | `scripts/f4/` | **scaffold, unrun**: rendered-concealment frame (VM + Playwright) |

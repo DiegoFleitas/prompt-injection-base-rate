@@ -81,6 +81,16 @@ These add documentation and one corrected reading; no analytic decision changed.
    window), 31 `benign-signature`, **0 `smuggling`** (no Tags, sneaky-bit or bidi
    candidates). That is a strong prior that D2 will be 0, and it is recorded here
    *before* the annotation so it cannot be presented as a post-hoc discovery.
+9. **Intervals re-estimated with a domain-clustered bootstrap** (`summarize.js`,
+   2,000 replicas, seed `20261026`). The Wilson intervals assumed independent
+   records; with 290 records over 275 domains and mirrored pages they were too
+   narrow. Clustered: overall 11.7% (8.1–15.6), non-Latin 13.9% (9.4–18.7),
+   Latin-only 3.4% (0–8.8). Reporting correction, not an analytic change.
+10. **`NEXT-STUDY.md` added**: the frame that would actually decide the question
+    (agent task URLs, targeted retrieval corpora, tool outputs, markup surfaces),
+    with the design requirements F1 taught us — language ID instead of script,
+    site-type stratification, clustered intervals, and a comparator that works
+    when the detector is silent.
 
 ## Known limitations carried forward
 

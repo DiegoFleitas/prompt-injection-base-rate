@@ -86,9 +86,13 @@ detector version. There is no hyperparameter search: every parameter is fixed a
 priori and logged in `deviations.md`.
 
 **C3. Descriptive statistics and variance? — Partial.** Proportions come with
-Wilson 95% intervals; the sample is a single draw, so run-to-run variance is not
-reported (and the fetch is deterministic given the seed). Sampling variability
-across crawls is **unmeasured** — one crawl was used. D2 has no estimate yet.
+Wilson 95% intervals, but those assume independent records — and this sample is
+clustered (290 records over 275 domains, with mirrored and near-duplicate pages),
+so the Wilson intervals are too narrow. A **domain-clustered bootstrap**
+(resampling domains, 2,000 replicas, seed `20261026`) is reported alongside:
+overall 11.7% (8.1–15.6), non-Latin 13.9% (9.4–18.7), Latin-only 3.4% (0–8.8).
+Sampling variability **across crawls** is still unmeasured — one crawl was used —
+and D2 has no estimate yet.
 
 **C4. Existing packages reported? — Yes.** Nothing beyond the Node.js standard
 library (version recorded in the run log); no NLP or ML packages. The detector is
@@ -157,3 +161,6 @@ human review queue" — instead of an FPR ratio.
 5. No PII scan, justified by not publishing text.
 6. The pre-registered K1/K2 rule is inapplicable on F1 (0 flags ⇒ no FPR); see
    "Decision-rule applicability".
+7. Intervals are corrected for **domain** clustering only. Correlation inside a
+   domain (near-duplicate pages from one template) is not modelled, and
+   between-crawl variance is unmeasured.

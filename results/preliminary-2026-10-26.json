@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-26T17:40:17.615Z",
+  "generatedAt": "2026-10-26T17:58:21.611Z",
   "frame": "F1-wet (Common Crawl plain-text extraction)",
   "n": 290,
   "domains": 275,
@@ -35,6 +35,41 @@
         0.9,
         11.5
       ]
+    }
+  },
+  "clusteredD1": {
+    "note": "bootstrap resampling domains (not records), because records within a domain are not independent",
+    "bootstrap": 2000,
+    "seed": 20261026,
+    "overall": {
+      "n": 290,
+      "d1": 34,
+      "prevalencePct": 11.7,
+      "ci95Pct": [
+        8.1,
+        15.6
+      ],
+      "domains": 275
+    },
+    "non-Latin script": {
+      "n": 231,
+      "d1": 32,
+      "prevalencePct": 13.9,
+      "ci95Pct": [
+        9.4,
+        18.7
+      ],
+      "domains": 220
+    },
+    "Latin-only": {
+      "n": 59,
+      "d1": 2,
+      "prevalencePct": 3.4,
+      "ci95Pct": [
+        0,
+        8.8
+      ],
+      "domains": 55
     }
   },
   "d1KindsPerRecord": {

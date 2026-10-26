@@ -30,6 +30,63 @@ const OUT = arg("out", path.join("results", `preliminary-${DATE}`));
 
 const pct = (x) => Math.round(1000 * x) / 10;
 
+const CLUSTER_BOOTSTRAP = 2000;
+const CLUSTER_SEED = 20261026;
+
+/** mulberry32, shared family with the sampler so a seed means one thing. */
+function mulberry32(seed) {
+  let a = seed >>> 0;
+  return function next() {
+    a = (a + 0x6d2b79f5) >>> 0;
+    let t = a;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+/**
+ * Domain-clustered bootstrap for a proportion.
+ *
+ * Records are not independent: 290 of them come from 275 domains, with mirrored
+ * and near-duplicate pages. Wilson intervals assume independence, so they are
+ * overconfident. Resampling *domains* with replacement and recomputing the
+ * proportion inside each resampled set gives an interval that reflects the
+ * clustering. Deterministic: same seed, same interval.
+ */
+function clusterBootstrap(records, isHit, { bootstrap = CLUSTER_BOOTSTRAP, seed = CLUSTER_SEED } = {}) {
+  const byDomain = new Map();
+  for (const record of records) {
+    const domain = record.domain || "unknown";
+    if (!byDomain.has(domain)) byDomain.set(domain, []);
+    byDomain.get(domain).push(record);
+  }
+  const domains = [...byDomain.keys()];
+  const rng = mulberry32(seed);
+  const rates = [];
+  for (let b = 0; b < bootstrap; b += 1) {
+    let hits = 0;
+    let n = 0;
+    for (let i = 0; i < domains.length; i += 1) {
+      for (const record of byDomain.get(domains[Math.floor(rng() * domains.length)])) {
+        n += 1;
+        if (isHit(record)) hits += 1;
+      }
+    }
+    rates.push(hits / n);
+  }
+  rates.sort((a, b) => a - b);
+  const at = (q) => rates[Math.min(rates.length - 1, Math.max(0, Math.floor(q * rates.length)))];
+  const hits = records.filter(isHit).length;
+  return {
+    n: records.length,
+    d1: hits,
+    prevalencePct: pct(records.length ? hits / records.length : 0),
+    ci95Pct: [pct(at(0.025)), pct(at(0.975))],
+    domains: domains.length,
+  };
+}
+
 function readJsonl(file) {
   return fs
     .readFileSync(file, "utf8")
@@ -100,6 +157,7 @@ function main() {
   };
   const scriptCounts = {};
   let recordsWithNonLatin = 0;
+  const nonLatinById = new Map();
   for (const record of records) {
     const seen = new Set();
     for (const ch of record.text) {
@@ -108,6 +166,7 @@ function main() {
         if (cp >= lo && cp <= hi) seen.add(name);
       }
     }
+    nonLatinById.set(record.id, seen.size > 0);
     if (seen.size) recordsWithNonLatin += 1;
     for (const name of seen) scriptCounts[name] = (scriptCounts[name] || 0) + 1;
   }
@@ -148,6 +207,27 @@ function main() {
     })
   );
 
+  // Wilson intervals assume records are independent. They are not: 290 records
+  // come from 275 domains, with mirrored and near-duplicate pages. The honest
+  // interval resamples domains, not records.
+  const clusterOverall = clusterBootstrap(records, (record) => d1Ids.has(record.id));
+  const clusterNonLatin = clusterBootstrap(
+    records.filter((record) => nonLatinById.get(record.id)),
+    (record) => d1Ids.has(record.id)
+  );
+  const clusterLatinOnly = clusterBootstrap(
+    records.filter((record) => !nonLatinById.get(record.id)),
+    (record) => d1Ids.has(record.id)
+  );
+  const clusteredD1 = {
+    note: "bootstrap resampling domains (not records), because records within a domain are not independent",
+    bootstrap: CLUSTER_BOOTSTRAP,
+    seed: CLUSTER_SEED,
+    overall: clusterOverall,
+    "non-Latin script": clusterNonLatin,
+    "Latin-only": clusterLatinOnly,
+  };
+
   const summary = {
     generatedAt: new Date().toISOString(),
     frame: "F1-wet (Common Crawl plain-text extraction)",
@@ -161,6 +241,7 @@ function main() {
     },
     d1: { count: d1, prevalencePct: pct(d1ci.p), ci95Pct: [pct(d1ci.lo), pct(d1ci.hi)] },
     stratifiedD1,
+    clusteredD1,
     d1KindsPerRecord: kinds,
     scripts: {
       recordsWithNonLatinScript: recordsWithNonLatin,
@@ -243,6 +324,25 @@ function main() {
           `| ${stratum} | ${value.n} | ${value.d1} | ${value.prevalencePct}% (95% CI ${value.ci95Pct[0]}–${value.ci95Pct[1]}%) |`
       ),
       "",
+      "### Intervals that account for clustering",
+      "",
+      "The Wilson intervals above assume the 290 records are independent. They are",
+      "not: the sample holds 275 domains and includes mirrored or near-duplicate",
+      "pages, so those intervals are too narrow. Resampling **domains** (not records)",
+      "for a 95% interval:",
+      "",
+      "| Stratum | Domains | Prevalence | Clustered 95% CI |",
+      "| --- | ---: | ---: | --- |",
+      ...Object.entries(clusteredD1)
+        .filter(([, value]) => value && typeof value === "object" && "ci95Pct" in value)
+        .map(
+          ([stratum, value]) =>
+            `| ${stratum} | ${value.domains} | ${value.prevalencePct}% | ${value.ci95Pct[0]}–${value.ci95Pct[1]}% |`
+        ),
+      "",
+      `Bootstrap: ${clusteredD1.bootstrap} replicas, seed ${clusteredD1.seed}. Same seed, same`,
+      "interval — the number does not move between runs.",
+      "",
       "D2 (concealed instruction) is not measured here: it requires the human",
       "annotation in `labels.csv` and the pre-registered rule in `scripts/analyze.js`.",
       "",
@@ -256,6 +356,9 @@ function main() {
   for (const [stratum, value] of Object.entries(stratifiedD1)) {
     console.log(`  D1 ${stratum}: ${value.d1}/${value.n} = ${value.prevalencePct}%`);
   }
+  console.log(
+    `clustered D1 overall: ${clusterOverall.prevalencePct}% (95% CI ${clusterOverall.ci95Pct[0]}–${clusterOverall.ci95Pct[1]}%, ${clusterOverall.domains} domains, ${CLUSTER_BOOTSTRAP} replicas)`
+  );
   console.log(`wrote ${OUT}.json and ${OUT}.md`);
 }
 
