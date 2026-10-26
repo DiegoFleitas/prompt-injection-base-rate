@@ -75,6 +75,12 @@ These add documentation and one corrected reading; no analytic decision changed.
 7. **D2 report template added** (`results/annotation-template.md`) so the
    annotation pass has a fixed output shape — including the instruction not to
    substitute a guessed FPR if the formal rule cannot fire.
+8. **Triage helper added** (`scripts/triage.js`) to prioritise the 34 candidates
+   by how much human judgement they need. It writes no labels and keeps the blind
+   pass intact. Result on this sample: 3 `context` (zero-width outside a CJK
+   window), 31 `benign-signature`, **0 `smuggling`** (no Tags, sneaky-bit or bidi
+   candidates). That is a strong prior that D2 will be 0, and it is recorded here
+   *before* the annotation so it cannot be presented as a post-hoc discovery.
 
 ## Known limitations carried forward
 

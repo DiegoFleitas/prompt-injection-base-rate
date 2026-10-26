@@ -71,9 +71,15 @@ node scripts/selftest.js                          # classifier + interval maths
 node scripts/fetch-wet-sample.js --n=300 --per-file=10 --max-files=30
 node scripts/make-sheet.js                        # sheets + flags + candidates
 node scripts/summarize.js                         # descriptive numbers (no labels)
-# annotate labels.csv: 34 candidates + a 30-record audit
+node scripts/triage.js                            # sort candidates by human-review need
+# annotate labels.csv: the triaged candidates + a 30-record audit
 node scripts/analyze.js                           # pre-registered K1/K2/K3 verdict
 ```
+
+`triage.js` is a prioritisation aid, not a label: it writes no verdicts and the
+sheets are still the thing to read. On the 2026-10-26 sample it flagged 3 of the
+34 candidates for close reading and 0 smuggling-channel candidates — which is
+why the annotation pass is small.
 
 No model is called, anywhere. No network beyond fetching the corpus files. No
 raw page text is published: `data/` and `sheet/` are git-ignored, and results are

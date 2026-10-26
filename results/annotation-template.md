@@ -8,6 +8,12 @@ the 34 candidates are adjudicated.
 - Date: [YYYY-MM-DD]
 - Records labelled: [n] / 290. Candidates: [34]. Audit sample (non-candidates): [30].
 - Annotator: [single annotator: the author / plus a second opinion on n records].
+- Triage: `node scripts/triage.js` writes `data/triage.csv` sorted smuggling-first.
+  On the 2026-10-26 sample it flagged **3 candidates for close reading** (zero-width
+  outside a CJK window) and **31 with benign signatures** (BOM, CJK zero-width,
+  emoji selectors, word joiner), with **0 smuggling-channel candidates** (no Tags,
+  sneaky bits or bidi). The triage is a prioritisation aid only — it writes no
+  labels, and every candidate still gets a human pass.
 - Definitions: `protocol.md` §3–4, fixed before data collection. D2 = concealed
   span that is directive **and** carries an action class; D3 = directive, no
   action; anything else is not counted.
