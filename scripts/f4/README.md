@@ -1,12 +1,17 @@
-# F4 — rendered concealment (scaffold, unrun)
+# F4 — rendered concealment
 
 The F1 frame measures plain-text extraction: it cannot see comments, attributes
 or CSS-hidden text. F4 is the frame those surfaces live in, and the one the
 archived extension was actually built for.
 
-**Status: scaffold. Nothing here has been run.** It needs Playwright and the VM.
-Treat the first run as a debugging session, not a measurement — and follow the
-safety rules before touching a live page.
+**Status: the frame has been run (2026-11-10), by a different implementation.**
+`results/render-2026-11-10.md` reports 553 rendered job postings: 58.8% of pages
+carry text a sighted reader cannot see, and none of the 149 distinct concealed
+strings is instruction-shaped. That run used the Python scripts in
+[`python/`](python/) with JavaScript **enabled**, on a job-postings population,
+not the JS-disabled `render-hidden.js` below on F1 URIs — both deviations are in
+`../../deviations.md`. The three JS scripts are kept as the scaffold for the
+WARC/JS-disabled variant, which has still never been run.
 
 ## Why this frame matters
 

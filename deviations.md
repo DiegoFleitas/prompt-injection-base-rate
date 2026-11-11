@@ -113,3 +113,36 @@ These add documentation and one corrected reading; no analytic decision changed.
 - One crawl, one PRNG seed, one extraction pipeline. Reported as "agent-ingest
   text", never "the web".
 - Languages are not identified, only scripts.
+## Run log — F4 sample, 2026-11-10 (not pre-registered)
+
+F1's standard does not hold here: this frame was designed, run and written up in
+one pass. Recorded so the difference is not discovered later.
+
+| | |
+| --- | --- |
+| population | 553 job postings, 14 employers, three ATS families (Greenhouse 320, Ashby 153, Lever 80) |
+| sampling | systematic, 40 per board, id-sorted from each board's own API ordering |
+| fetch | 2026-11-10, unauthenticated syndication APIs, one pass; per-page SHA-256 in `results/render-2026-11-10.manifest.jsonl` |
+| instrument | headless Chromium 156, 1280×900, computed style per element; 13 concealment predicates; Unicode + attributes + JSON-LD + meta description + `<template>` |
+| units | 5,728 concealed elements → 149 distinct strings (sha16 + length only) |
+
+Deviations from the scaffold (`scripts/f4/`):
+
+1. **JavaScript enabled.** The scaffold disables JS and renders saved HTML. These
+   ATS pages are client-rendered, so a JS-disabled run would measure a different,
+   smaller frame. The frame here is "what an agent's browser sees", which is the
+   decision this study is about — but it is not the scaffold's frame.
+2. **Population is job postings**, not a sample of F1 URIs: the question moved
+   from "the web" to content an agent ingests for matching.
+3. **Python implementation** (`scripts/f4/python/`) rather than `render-hidden.js`.
+   The channel list is a superset of the scaffold's except for JSON-LD `@graph`
+   nesting, which is treated as flat text.
+4. **Comments measured on a 101-page subsample only** (80 nodes, none
+   instruction-shaped). Not a full-corpus channel in this run.
+5. **No raw page text is stored or published.** Concealed strings exist as
+   SHA-256 prefix and length; titles are dropped from the manifest.
+
+Interpretation rule applied to the five stage-2 hits on JSON-LD and meta
+description: all sit in schema.org `JobPosting` objects, none carries a
+second-person directive, role-play frame, wrapper tag, assistant turn or
+"ignore" clause. Adjudicated as false positives on job prose, not instructions.

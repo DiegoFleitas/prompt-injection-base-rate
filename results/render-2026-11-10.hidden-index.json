@@ -1,0 +1,2097 @@
+[
+ {
+  "sha16": "c887f134c26ea831",
+  "len": 20,
+  "docs": 80,
+  "mech": {
+   "sr_box": 40,
+   "offscreen": 40
+  },
+  "tags": {
+   "a": 40,
+   "span": 40
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "de4743c879734dc3",
+  "len": 7,
+  "docs": 80,
+  "mech": {
+   "display_none": 80
+  },
+  "tags": {
+   "span": 40,
+   "p": 40
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "7e658675b5ca75b3",
+  "len": 7,
+  "docs": 80,
+  "mech": {
+   "display_none": 40,
+   "visibility_hidden": 40
+  },
+  "tags": {
+   "span": 40,
+   "a": 40
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "ee290b3ddbc8e7e9",
+  "len": 13,
+  "docs": 70,
+  "mech": {
+   "display_none": 70
+  },
+  "tags": {
+   "div": 70
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "a697f90fb1994231",
+  "len": 4,
+  "docs": 52,
+  "mech": {
+   "visibility_hidden": 12,
+   "display_none": 40
+  },
+  "tags": {
+   "span": 12,
+   "p": 40
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "63dceb8800b2dd4a",
+  "len": 5,
+  "docs": 49,
+  "mech": {
+   "sr_box": 49
+  },
+  "tags": {
+   "legend": 49
+  },
+  "in_main": 49,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "d406ade2958cb5b6",
+  "len": 6,
+  "docs": 49,
+  "mech": {
+   "sr_box": 49
+  },
+  "tags": {
+   "label": 49
+  },
+  "in_main": 49,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "ad876beba8ac4b36",
+  "len": 14,
+  "docs": 49,
+  "mech": {
+   "sr_box": 49
+  },
+  "tags": {
+   "label": 49
+  },
+  "in_main": 49,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "d5150bb6c5de17cb",
+  "len": 10,
+  "docs": 49,
+  "mech": {
+   "visibility_hidden": 49,
+   "tiny_font": 49
+  },
+  "tags": {
+   "text": 49
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "25c4797cdc7f6c54",
+  "len": 10,
+  "docs": 40,
+  "mech": {
+   "visibility_hidden": 40
+  },
+  "tags": {
+   "p": 40
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "cc0e38da9c41790b",
+  "len": 9,
+  "docs": 40,
+  "mech": {
+   "visibility_hidden": 40
+  },
+  "tags": {
+   "span": 40
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "d4a33d5b78bccebe",
+  "len": 8,
+  "docs": 40,
+  "mech": {
+   "display_none": 40
+  },
+  "tags": {
+   "span": 40
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "aabe76f1f4ec532b",
+  "len": 9,
+  "docs": 40,
+  "mech": {
+   "display_none": 40
+  },
+  "tags": {
+   "span": 40
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "5dab502bfba3c3df",
+  "len": 8,
+  "docs": 40,
+  "mech": {
+   "display_none": 40
+  },
+  "tags": {
+   "span": 40
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "04c569aa2d6eb099",
+  "len": 29,
+  "docs": 40,
+  "mech": {
+   "display_none": 40
+  },
+  "tags": {
+   "span": 40
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "dfe95783edfef791",
+  "len": 7,
+  "docs": 40,
+  "mech": {
+   "display_none": 40
+  },
+  "tags": {
+   "span": 40
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "fdb627efb86ba73e",
+  "len": 11,
+  "docs": 40,
+  "mech": {
+   "display_none": 40
+  },
+  "tags": {
+   "button": 40
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "157770c44035ceba",
+  "len": 21,
+  "docs": 40,
+  "mech": {
+   "display_none": 40
+  },
+  "tags": {
+   "span": 40
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "73af6b46ce7fb493",
+  "len": 25,
+  "docs": 40,
+  "mech": {
+   "display_none": 40
+  },
+  "tags": {
+   "span": 40
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "28d5521ab47cb518",
+  "len": 24,
+  "docs": 40,
+  "mech": {
+   "display_none": 40
+  },
+  "tags": {
+   "span": 40
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "6076b07fec382ecc",
+  "len": 14,
+  "docs": 40,
+  "mech": {
+   "display_none": 40
+  },
+  "tags": {
+   "button": 40
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "409ba3b6bce39214",
+  "len": 28,
+  "docs": 40,
+  "mech": {
+   "display_none": 40
+  },
+  "tags": {
+   "button": 40
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "e29051c7281be525",
+  "len": 21,
+  "docs": 40,
+  "mech": {
+   "display_none": 40
+  },
+  "tags": {
+   "button": 40
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "c205924de0fe636c",
+  "len": 13,
+  "docs": 40,
+  "mech": {
+   "display_none": 40
+  },
+  "tags": {
+   "button": 40
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "ed07c04922e0edd1",
+  "len": 16,
+  "docs": 40,
+  "mech": {
+   "display_none": 40
+  },
+  "tags": {
+   "button": 40
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "bb501d7877eb7ddb",
+  "len": 9,
+  "docs": 40,
+  "mech": {
+   "display_none": 40
+  },
+  "tags": {
+   "button": 40
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "8b45bb20e0775c30",
+  "len": 8,
+  "docs": 40,
+  "mech": {
+   "display_none": 40
+  },
+  "tags": {
+   "span": 40
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "8d14f6e72de8f18a",
+  "len": 6,
+  "docs": 40,
+  "mech": {
+   "display_none": 40
+  },
+  "tags": {
+   "span": 40
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "ffc96f1f8aeeac26",
+  "len": 17,
+  "docs": 40,
+  "mech": {
+   "display_none": 40
+  },
+  "tags": {
+   "span": 40
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "9ed1273e9b5a5579",
+  "len": 5,
+  "docs": 40,
+  "mech": {
+   "display_none": 40
+  },
+  "tags": {
+   "span": 40
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "e488f061b277e54c",
+  "len": 18,
+  "docs": 40,
+  "mech": {
+   "display_none": 40
+  },
+  "tags": {
+   "button": 40
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "982a97824a60f88c",
+  "len": 11,
+  "docs": 40,
+  "mech": {
+   "color_eq_bg": 40
+  },
+  "tags": {
+   "span": 40
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "8a70e9bab8b7d599",
+  "len": 13,
+  "docs": 40,
+  "mech": {
+   "color_eq_bg": 40
+  },
+  "tags": {
+   "span": 40
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "ae4fc6a15d1ce96b",
+  "len": 9,
+  "docs": 40,
+  "mech": {
+   "sr_box": 40
+  },
+  "tags": {
+   "span": 40
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "c219bbd71512525e",
+  "len": 9,
+  "docs": 40,
+  "mech": {
+   "sr_box": 40
+  },
+  "tags": {
+   "span": 40
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "1d61a1e2e05d5cd7",
+  "len": 14,
+  "docs": 40,
+  "mech": {
+   "display_none": 40,
+   "sr_box": 40
+  },
+  "tags": {
+   "span": 40
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "983f311018642b0a",
+  "len": 11,
+  "docs": 40,
+  "mech": {
+   "display_none": 40
+  },
+  "tags": {
+   "p": 40
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "4edc8bfafc6bd936",
+  "len": 8,
+  "docs": 40,
+  "mech": {
+   "display_none": 40
+  },
+  "tags": {
+   "p": 40
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "d3cb16b7639ec312",
+  "len": 15,
+  "docs": 40,
+  "mech": {
+   "display_none": 40
+  },
+  "tags": {
+   "p": 40
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "38b1a028b89be2d7",
+  "len": 10,
+  "docs": 40,
+  "mech": {
+   "visibility_hidden": 40
+  },
+  "tags": {
+   "a": 40
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "402d14e1f45c87a5",
+  "len": 15,
+  "docs": 40,
+  "mech": {
+   "visibility_hidden": 40
+  },
+  "tags": {
+   "a": 40
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "5aa34886f7f3741d",
+  "len": 13,
+  "docs": 40,
+  "mech": {
+   "visibility_hidden": 40
+  },
+  "tags": {
+   "a": 40
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "5a59ef2e40c5f89a",
+  "len": 13,
+  "docs": 40,
+  "mech": {
+   "visibility_hidden": 40
+  },
+  "tags": {
+   "a": 40
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "074a11cf2e6bb097",
+  "len": 20,
+  "docs": 40,
+  "mech": {
+   "visibility_hidden": 40
+  },
+  "tags": {
+   "a": 40
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "35388e9f363dd162",
+  "len": 14,
+  "docs": 40,
+  "mech": {
+   "visibility_hidden": 40
+  },
+  "tags": {
+   "a": 40
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "2b235be6ba251a42",
+  "len": 28,
+  "docs": 40,
+  "mech": {
+   "visibility_hidden": 40
+  },
+  "tags": {
+   "a": 40
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "5ceffae96b11d68c",
+  "len": 5,
+  "docs": 40,
+  "mech": {
+   "visibility_hidden": 40
+  },
+  "tags": {
+   "a": 40
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "919a92533fbe1d81",
+  "len": 14,
+  "docs": 40,
+  "mech": {
+   "visibility_hidden": 40
+  },
+  "tags": {
+   "a": 40
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "f06dbfb4997831e1",
+  "len": 32,
+  "docs": 40,
+  "mech": {
+   "visibility_hidden": 40
+  },
+  "tags": {
+   "a": 40
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "532f8e608cd23f4f",
+  "len": 24,
+  "docs": 40,
+  "mech": {
+   "visibility_hidden": 40
+  },
+  "tags": {
+   "a": 40
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "e3a3627ece0c7ecb",
+  "len": 17,
+  "docs": 40,
+  "mech": {
+   "visibility_hidden": 40
+  },
+  "tags": {
+   "a": 40
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "729bb48d0f86a9e2",
+  "len": 11,
+  "docs": 40,
+  "mech": {
+   "visibility_hidden": 40
+  },
+  "tags": {
+   "a": 40
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "4787eaf7c938045f",
+  "len": 5,
+  "docs": 40,
+  "mech": {
+   "visibility_hidden": 40
+  },
+  "tags": {
+   "a": 40
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "e88caf01c56aba1e",
+  "len": 20,
+  "docs": 40,
+  "mech": {
+   "visibility_hidden": 40
+  },
+  "tags": {
+   "a": 40
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "3129706d39a383c5",
+  "len": 18,
+  "docs": 40,
+  "mech": {
+   "visibility_hidden": 40
+  },
+  "tags": {
+   "a": 40
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "6e0e1663a7108e82",
+  "len": 27,
+  "docs": 40,
+  "mech": {
+   "visibility_hidden": 40
+  },
+  "tags": {
+   "a": 40
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "fb9ef894175c3274",
+  "len": 7,
+  "docs": 40,
+  "mech": {
+   "visibility_hidden": 40
+  },
+  "tags": {
+   "a": 40
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "383f96b78a29ed9d",
+  "len": 15,
+  "docs": 40,
+  "mech": {
+   "visibility_hidden": 40
+  },
+  "tags": {
+   "a": 40
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "b486471fa677683e",
+  "len": 10,
+  "docs": 40,
+  "mech": {
+   "visibility_hidden": 40
+  },
+  "tags": {
+   "a": 40
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "9aa71755af83eb22",
+  "len": 17,
+  "docs": 39,
+  "mech": {
+   "sr_box": 39
+  },
+  "tags": {
+   "span": 39
+  },
+  "in_main": 39,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "7d7e360586090927",
+  "len": 16,
+  "docs": 39,
+  "mech": {
+   "display_none": 39
+  },
+  "tags": {
+   "div": 39
+  },
+  "in_main": 39,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "ac576a66d4563e60",
+  "len": 15,
+  "docs": 12,
+  "mech": {
+   "offscreen": 12
+  },
+  "tags": {
+   "span": 12
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "6fc9b78dfd61518b",
+  "len": 18,
+  "docs": 12,
+  "mech": {
+   "offscreen": 12
+  },
+  "tags": {
+   "span": 12
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "6286b69c89d14be2",
+  "len": 12,
+  "docs": 12,
+  "mech": {
+   "visibility_hidden": 12
+  },
+  "tags": {
+   "span": 12
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "0caf652dd46b89a6",
+  "len": 25,
+  "docs": 12,
+  "mech": {
+   "visibility_hidden": 12
+  },
+  "tags": {
+   "span": 12
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "9f088dbebd6c3c70",
+  "len": 8,
+  "docs": 12,
+  "mech": {
+   "visibility_hidden": 12
+  },
+  "tags": {
+   "span": 12
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "237d941b69af394f",
+  "len": 32,
+  "docs": 12,
+  "mech": {
+   "visibility_hidden": 12
+  },
+  "tags": {
+   "span": 12
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "ee869bf699c03703",
+  "len": 45,
+  "docs": 12,
+  "mech": {
+   "visibility_hidden": 12
+  },
+  "tags": {
+   "span": 12
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "16c5597fe29db7c2",
+  "len": 34,
+  "docs": 12,
+  "mech": {
+   "visibility_hidden": 12
+  },
+  "tags": {
+   "span": 12
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "aa165a971045c40a",
+  "len": 12,
+  "docs": 12,
+  "mech": {
+   "visibility_hidden": 12
+  },
+  "tags": {
+   "span": 12
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "6a10dbc9d6e2f9f9",
+  "len": 30,
+  "docs": 12,
+  "mech": {
+   "visibility_hidden": 12
+  },
+  "tags": {
+   "span": 12
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "a38b05e7f489be48",
+  "len": 15,
+  "docs": 12,
+  "mech": {
+   "visibility_hidden": 12
+  },
+  "tags": {
+   "span": 12
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "5a0940ec4292618f",
+  "len": 37,
+  "docs": 12,
+  "mech": {
+   "visibility_hidden": 12
+  },
+  "tags": {
+   "span": 12
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "c7f79ea0102487c5",
+  "len": 14,
+  "docs": 12,
+  "mech": {
+   "visibility_hidden": 12
+  },
+  "tags": {
+   "span": 12
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "46a6d8e06a8db599",
+  "len": 34,
+  "docs": 12,
+  "mech": {
+   "visibility_hidden": 12
+  },
+  "tags": {
+   "span": 12
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "9f629f57b7d02936",
+  "len": 11,
+  "docs": 12,
+  "mech": {
+   "visibility_hidden": 12
+  },
+  "tags": {
+   "span": 12
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "5a6615213831eaf0",
+  "len": 26,
+  "docs": 12,
+  "mech": {
+   "visibility_hidden": 12
+  },
+  "tags": {
+   "span": 12
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "90822ee1d520d059",
+  "len": 7,
+  "docs": 12,
+  "mech": {
+   "visibility_hidden": 12
+  },
+  "tags": {
+   "span": 12
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "91823daf6a877672",
+  "len": 35,
+  "docs": 12,
+  "mech": {
+   "visibility_hidden": 12
+  },
+  "tags": {
+   "span": 12
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "944e278918a23d48",
+  "len": 10,
+  "docs": 12,
+  "mech": {
+   "visibility_hidden": 12
+  },
+  "tags": {
+   "span": 12
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "24c1668f4176c5e2",
+  "len": 29,
+  "docs": 12,
+  "mech": {
+   "visibility_hidden": 12
+  },
+  "tags": {
+   "span": 12
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "ce78afd0e6a225ec",
+  "len": 5,
+  "docs": 12,
+  "mech": {
+   "visibility_hidden": 12
+  },
+  "tags": {
+   "span": 12
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "7a672e9b99e8eeb8",
+  "len": 22,
+  "docs": 12,
+  "mech": {
+   "visibility_hidden": 12
+  },
+  "tags": {
+   "span": 12
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "e8ef96f150aee80f",
+  "len": 21,
+  "docs": 12,
+  "mech": {
+   "visibility_hidden": 12
+  },
+  "tags": {
+   "span": 12
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "7fc94d3dd8fe4266",
+  "len": 28,
+  "docs": 12,
+  "mech": {
+   "visibility_hidden": 12
+  },
+  "tags": {
+   "span": 12
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "44fa5f4f82fb6d72",
+  "len": 12,
+  "docs": 12,
+  "mech": {
+   "visibility_hidden": 12
+  },
+  "tags": {
+   "span": 12
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "76f68a75f01ed76f",
+  "len": 8,
+  "docs": 12,
+  "mech": {
+   "visibility_hidden": 12
+  },
+  "tags": {
+   "span": 12
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "621342cb317e4da0",
+  "len": 49,
+  "docs": 12,
+  "mech": {
+   "visibility_hidden": 12
+  },
+  "tags": {
+   "span": 12
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "aede51307dcb0b42",
+  "len": 14,
+  "docs": 12,
+  "mech": {
+   "visibility_hidden": 12
+  },
+  "tags": {
+   "span": 12
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "12d8361c6e546701",
+  "len": 15,
+  "docs": 8,
+  "mech": {
+   "visibility_hidden": 8
+  },
+  "tags": {
+   "span": 8
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "cc8e2eee8d931809",
+  "len": 8,
+  "docs": 4,
+  "mech": {
+   "visibility_hidden": 4
+  },
+  "tags": {
+   "span": 4
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "ba48a6c71408c897",
+  "len": 33,
+  "docs": 4,
+  "mech": {
+   "display_none": 4
+  },
+  "tags": {
+   "p": 4
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "ccdf225634784ec3",
+  "len": 33,
+  "docs": 3,
+  "mech": {
+   "display_none": 3
+  },
+  "tags": {
+   "p": 3
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "6414d7f43da9bd80",
+  "len": 33,
+  "docs": 3,
+  "mech": {
+   "display_none": 3
+  },
+  "tags": {
+   "p": 3
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "5893118bf96f37c5",
+  "len": 33,
+  "docs": 3,
+  "mech": {
+   "display_none": 3
+  },
+  "tags": {
+   "p": 3
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "d8735093b1df1a5d",
+  "len": 33,
+  "docs": 2,
+  "mech": {
+   "display_none": 2
+  },
+  "tags": {
+   "p": 2
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "0711ee672b2502a2",
+  "len": 32,
+  "docs": 2,
+  "mech": {
+   "display_none": 2
+  },
+  "tags": {
+   "p": 2
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "dc2a72116da7989e",
+  "len": 13,
+  "docs": 2,
+  "mech": {
+   "color_eq_bg": 2
+  },
+  "tags": {
+   "span": 2
+  },
+  "in_main": 2,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "104ee10f754f04dd",
+  "len": 37,
+  "docs": 2,
+  "mech": {
+   "display_none": 2
+  },
+  "tags": {
+   "span": 2
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "d2d6a63e4bf57d3a",
+  "len": 33,
+  "docs": 2,
+  "mech": {
+   "display_none": 2
+  },
+  "tags": {
+   "p": 2
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "24f45adb769c006a",
+  "len": 33,
+  "docs": 2,
+  "mech": {
+   "display_none": 2
+  },
+  "tags": {
+   "p": 2
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "5f642c8067ce20c2",
+  "len": 39,
+  "docs": 2,
+  "mech": {
+   "display_none": 2
+  },
+  "tags": {
+   "p": 2
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "060ec76c6c4d5a64",
+  "len": 35,
+  "docs": 2,
+  "mech": {
+   "display_none": 2
+  },
+  "tags": {
+   "p": 2
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "320e18ae47f76e4c",
+  "len": 33,
+  "docs": 2,
+  "mech": {
+   "display_none": 2
+  },
+  "tags": {
+   "p": 2
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "268ef7a7a843dd58",
+  "len": 33,
+  "docs": 1,
+  "mech": {
+   "display_none": 1
+  },
+  "tags": {
+   "p": 1
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "f246056ac2487b59",
+  "len": 33,
+  "docs": 1,
+  "mech": {
+   "display_none": 1
+  },
+  "tags": {
+   "p": 1
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "70e6b28bd443f04b",
+  "len": 33,
+  "docs": 1,
+  "mech": {
+   "display_none": 1
+  },
+  "tags": {
+   "p": 1
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "03aef8500b51c247",
+  "len": 33,
+  "docs": 1,
+  "mech": {
+   "display_none": 1
+  },
+  "tags": {
+   "p": 1
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "e6cf2245b0dd1a6d",
+  "len": 33,
+  "docs": 1,
+  "mech": {
+   "display_none": 1
+  },
+  "tags": {
+   "p": 1
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "c3e0c5db479359b6",
+  "len": 33,
+  "docs": 1,
+  "mech": {
+   "display_none": 1
+  },
+  "tags": {
+   "p": 1
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "d4e67610d84220fc",
+  "len": 33,
+  "docs": 1,
+  "mech": {
+   "display_none": 1
+  },
+  "tags": {
+   "p": 1
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "f85ec3a342916ce7",
+  "len": 33,
+  "docs": 1,
+  "mech": {
+   "display_none": 1
+  },
+  "tags": {
+   "p": 1
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "71d336e4c3facf7a",
+  "len": 33,
+  "docs": 1,
+  "mech": {
+   "display_none": 1
+  },
+  "tags": {
+   "p": 1
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "a1de54dd84538b4c",
+  "len": 33,
+  "docs": 1,
+  "mech": {
+   "display_none": 1
+  },
+  "tags": {
+   "p": 1
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "7cccbcf0ee875d20",
+  "len": 33,
+  "docs": 1,
+  "mech": {
+   "display_none": 1
+  },
+  "tags": {
+   "p": 1
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "370cc6a58a198d6b",
+  "len": 33,
+  "docs": 1,
+  "mech": {
+   "display_none": 1
+  },
+  "tags": {
+   "p": 1
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "c386fe792a17dabf",
+  "len": 33,
+  "docs": 1,
+  "mech": {
+   "display_none": 1
+  },
+  "tags": {
+   "p": 1
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "977ce3cdc20b0a69",
+  "len": 33,
+  "docs": 1,
+  "mech": {
+   "display_none": 1
+  },
+  "tags": {
+   "p": 1
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "4881647d14389b54",
+  "len": 33,
+  "docs": 1,
+  "mech": {
+   "display_none": 1
+  },
+  "tags": {
+   "p": 1
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "7510c8c528c46132",
+  "len": 33,
+  "docs": 1,
+  "mech": {
+   "display_none": 1
+  },
+  "tags": {
+   "p": 1
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "f4348ba0304cc929",
+  "len": 33,
+  "docs": 1,
+  "mech": {
+   "display_none": 1
+  },
+  "tags": {
+   "p": 1
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "bc9ecc7691603a08",
+  "len": 33,
+  "docs": 1,
+  "mech": {
+   "display_none": 1
+  },
+  "tags": {
+   "p": 1
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "6676720f7ff6e227",
+  "len": 33,
+  "docs": 1,
+  "mech": {
+   "display_none": 1
+  },
+  "tags": {
+   "p": 1
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "603e0279fa2fa093",
+  "len": 33,
+  "docs": 1,
+  "mech": {
+   "display_none": 1
+  },
+  "tags": {
+   "p": 1
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "05630f83523a6231",
+  "len": 33,
+  "docs": 1,
+  "mech": {
+   "display_none": 1
+  },
+  "tags": {
+   "p": 1
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "a90e95b8ff7a97db",
+  "len": 33,
+  "docs": 1,
+  "mech": {
+   "display_none": 1
+  },
+  "tags": {
+   "p": 1
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "d18babf387c04cd4",
+  "len": 33,
+  "docs": 1,
+  "mech": {
+   "display_none": 1
+  },
+  "tags": {
+   "p": 1
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "2b362049fd8dd8f6",
+  "len": 33,
+  "docs": 1,
+  "mech": {
+   "display_none": 1
+  },
+  "tags": {
+   "p": 1
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "09d97974a7b2523d",
+  "len": 33,
+  "docs": 1,
+  "mech": {
+   "display_none": 1
+  },
+  "tags": {
+   "p": 1
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "099e2f76a475353c",
+  "len": 33,
+  "docs": 1,
+  "mech": {
+   "display_none": 1
+  },
+  "tags": {
+   "p": 1
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "b5ddaef0c700fd3a",
+  "len": 33,
+  "docs": 1,
+  "mech": {
+   "display_none": 1
+  },
+  "tags": {
+   "p": 1
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "3d90325c9a3ddcec",
+  "len": 33,
+  "docs": 1,
+  "mech": {
+   "display_none": 1
+  },
+  "tags": {
+   "p": 1
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "df1c3c677b2ab9b5",
+  "len": 33,
+  "docs": 1,
+  "mech": {
+   "display_none": 1
+  },
+  "tags": {
+   "p": 1
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "2b72e229657e5100",
+  "len": 33,
+  "docs": 1,
+  "mech": {
+   "display_none": 1
+  },
+  "tags": {
+   "p": 1
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "09bcf29bb135d336",
+  "len": 33,
+  "docs": 1,
+  "mech": {
+   "display_none": 1
+  },
+  "tags": {
+   "p": 1
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "854581be017a7698",
+  "len": 33,
+  "docs": 1,
+  "mech": {
+   "display_none": 1
+  },
+  "tags": {
+   "p": 1
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "42599a7f75cfa105",
+  "len": 33,
+  "docs": 1,
+  "mech": {
+   "display_none": 1
+  },
+  "tags": {
+   "p": 1
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "785646cea85632d8",
+  "len": 33,
+  "docs": 1,
+  "mech": {
+   "display_none": 1
+  },
+  "tags": {
+   "p": 1
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "00cd93b5c00e2334",
+  "len": 25,
+  "docs": 1,
+  "mech": {
+   "display_none": 1
+  },
+  "tags": {
+   "p": 1
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "073ffc88849e352a",
+  "len": 33,
+  "docs": 1,
+  "mech": {
+   "display_none": 1
+  },
+  "tags": {
+   "p": 1
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "8347a273db3197d4",
+  "len": 33,
+  "docs": 1,
+  "mech": {
+   "display_none": 1
+  },
+  "tags": {
+   "p": 1
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "762b27e2e343cbcf",
+  "len": 33,
+  "docs": 1,
+  "mech": {
+   "display_none": 1
+  },
+  "tags": {
+   "p": 1
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "a616cea8818068ab",
+  "len": 33,
+  "docs": 1,
+  "mech": {
+   "display_none": 1
+  },
+  "tags": {
+   "p": 1
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "657a08b8baf730fb",
+  "len": 33,
+  "docs": 1,
+  "mech": {
+   "display_none": 1
+  },
+  "tags": {
+   "p": 1
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "321137f003a5bb68",
+  "len": 33,
+  "docs": 1,
+  "mech": {
+   "display_none": 1
+  },
+  "tags": {
+   "p": 1
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "c8db952115a93a12",
+  "len": 33,
+  "docs": 1,
+  "mech": {
+   "display_none": 1
+  },
+  "tags": {
+   "p": 1
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "9a036d6fea4db3b9",
+  "len": 33,
+  "docs": 1,
+  "mech": {
+   "display_none": 1
+  },
+  "tags": {
+   "p": 1
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "b8b47f74832e3772",
+  "len": 33,
+  "docs": 1,
+  "mech": {
+   "display_none": 1
+  },
+  "tags": {
+   "p": 1
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ },
+ {
+  "sha16": "3ce79889bbe36962",
+  "len": 35,
+  "docs": 1,
+  "mech": {
+   "display_none": 1
+  },
+  "tags": {
+   "p": 1
+  },
+  "in_main": 0,
+  "stage2": false,
+  "cues": []
+ }
+]

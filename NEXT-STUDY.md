@@ -52,10 +52,27 @@ Two consequences for the next study:
 | G1 — agent task pages | URL sets from public agent benchmarks: WebArena, Mind2Web, WebVoyager | These are pages agents were actually evaluated on, not crawl segments |
 | G2 — retrieval corpora | Docs sites (MDN, RFCs, vendor docs), GitHub issues/PRs, StackOverflow, wikis | The content a browsing or coding agent ingests most |
 | G3 — tool outputs | Search-result snippets, MCP tool results, email bodies, RSS | Where untrusted text enters the context with tools attached |
-| G4 — markup channels | Raw HTML (WARC) or fetched pages rendered offline with JS off | Comments, attributes, JSON-LD, CSS-hidden text — the F4 scaffold |
+| G4 — markup channels | Raw HTML (WARC) or fetched pages rendered offline with JS off | Comments, attributes, JSON-LD, CSS-hidden text — **run 2026-11-10 on job postings instead** (`results/render-2026-11-10.md`); the JS-off WARC variant is still unrun |
 
 G1–G3 answer "how often"; G4 answers "on which surfaces". A study needs both to
 say anything about a page-side defence.
+
+## What F4 already settled (2026-11-10)
+
+A first pass at G4 — rendered job postings, n=553, JS enabled — returned 58.8% of
+pages with text a reader cannot see, 0 instruction-shaped concealed strings out of
+149 distinct ones, and a sensitivity-adjusted bound of ≤2.9%. Two consequences for
+the frames above:
+
+- **The page-side question is close to answered for reading surfaces.** Concealment
+  is five times more common in markup than in extracted text and it is UI state,
+  not payload. What remains worth measuring is *how often an ingestion pipeline
+  pulls that text in* (median 3,290 extra characters per page in F4), because that
+  is where a page-side defence could still have a number.
+- **Sensitivity, not n, is the binding constraint.** 0 detections with 18.8%
+  end-to-end recall bounds prevalence at 2.9%, not 0.5%. Any G1–G3 run must
+  measure its own recall against independently authored payloads, or its null
+  means nothing.
 
 ## Design requirements (learned from F1)
 

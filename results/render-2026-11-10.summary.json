@@ -1,0 +1,100 @@
+{
+ "frame": "F4",
+ "date": "2026-11-10",
+ "n": 553,
+ "ats": {
+  "ashby": 153,
+  "greenhouse": 320,
+  "lever": 80
+ },
+ "employers": 14,
+ "channels": {
+  "render_css": {
+   "docs": 325,
+   "p_hat": 0.5877,
+   "ci95": [
+    0.5462,
+    0.628
+   ],
+   "in_body": 49,
+   "in_body_ci95": [
+    0.0677,
+    0.1152
+   ],
+   "spans": 5728,
+   "unique_strings": 149,
+   "unique_len_median": 25,
+   "unique_len_max": 49,
+   "instruction_shaped": 0
+  },
+  "unicode_invisible": {
+   "docs": 40,
+   "p_hat": 0.0723,
+   "ci95": [
+    0.0536,
+    0.097
+   ]
+  },
+  "attributes_ge40": {
+   "docs": 194,
+   "p_hat": 0.3508,
+   "stage2_hits": 0
+  },
+  "jsonld": {
+   "docs": 316,
+   "p_hat": 0.5714,
+   "stage2_hits": 3
+  },
+  "meta_description": {
+   "docs": 278,
+   "p_hat": 0.5027,
+   "stage2_hits": 2
+  },
+  "template": {
+   "docs": 0
+  },
+  "comments_subsample": {
+   "docs": 101,
+   "comments": 80,
+   "stage2_hits": 0
+  }
+ },
+ "ingest_gap_chars": {
+  "median": 3290,
+  "p90": 3872,
+  "subsample": 101
+ },
+ "heldout": {
+  "cases": 144,
+  "modelled_fired": [
+   68,
+   72
+  ],
+  "unmodelled_fired": [
+   0,
+   72
+  ],
+  "instruction_end_to_end": [
+   12,
+   64
+  ],
+  "data_injection_end_to_end": [
+   0,
+   48
+  ],
+  "sensitivity": 0.1875
+ },
+ "inference": {
+  "fpr_channel_doc": 0.5877,
+  "fpr_stage2_ub": 0.00542,
+  "prevalence_ub_95": 0.0289,
+  "prevalence_ub_95_perfect_stage2": 0.0054,
+  "p_zero_given_1pct": 0.3542,
+  "ppv": {
+   "channel_only_p1pct": 0.0169,
+   "stage2_p1pct": 0.2588,
+   "stage2_p0_1pct": 0.0334,
+   "stage2_zhang_mix_p1pct": 0.0321
+  }
+ }
+}
