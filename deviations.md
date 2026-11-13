@@ -246,3 +246,13 @@ smuggling, 87 context, 457 benign-signature. E1 surfaces appear in 1,297 records
 The channel split is recorded here, before adjudication, so the report cannot
 imply a different shape later. Whether the HTML-dominant count is template noise
 or something else is what the human pass decides.
+
+## Retention executed — 2026-11-13
+
+`data/f5/text/` (1,338 decoded messages, 110 MB) was deleted after the analysis
+run, per protocol §10. Kept: `corpus/` (the snapshot), `corpus.sha256`,
+`corpus-manifest.csv`, `index.csv` (text-free), `flags.csv`, `triage.csv`,
+`sheet/`, `labels.csv`, `salt.txt`. Re-extraction is reproducible from the
+snapshot in about six seconds, so the deletion costs nothing that cannot be
+regenerated locally.
+
