@@ -4,7 +4,11 @@ Sampling: systematic from the API's own ordering (id-sorted), cap per board.
 Provenance recorded per posting: ats, board, job id, url, title, fetched_at,
 content sha256, byte size. Raw HTML kept for re-adjudication.
 
-Usage: python fetch_boards.py [cap_per_board]
+Usage: python fetch_boards.py [cap_per_board] [boards_file]
+The board list is not published: it names the employers sampled. It lives in
+data/f4/boards.txt (git-ignored, one "ats board" per line), or the path given
+as the second argument / F4_BOARDS. The published manifest carries a salted
+board hash instead of the name.
 Prints digests only.
 """
 import json, os, sys, time, hashlib, urllib.request, urllib.error
@@ -15,10 +19,24 @@ MAN = os.path.join(HERE, "corpus_manifest.jsonl")
 UA = {"User-Agent": "Mozilla/5.0 (academic base-rate measurement; local)"}
 CAP = int(sys.argv[1]) if len(sys.argv) > 1 else 40
 
-BOARDS = [("greenhouse", b) for b in
-          ["stripe", "databricks", "anthropic", "coinbase", "gitlab", "robinhood", "figma", "instacart"]] + \
-         [("lever", b) for b in ["palantir", "spotify"]] + \
-         [("ashby", b) for b in ["openai", "notion", "vanta", "linear"]]
+BOARDS_FILE = (sys.argv[2] if len(sys.argv) > 2
+               else os.environ.get("F4_BOARDS")
+               or os.path.join(HERE, "..", "..", "..", "data", "f4", "boards.txt"))
+
+
+def load_boards(path):
+    pairs = []
+    with open(path, encoding="utf-8") as fh:
+        for line in fh:
+            line = line.strip()
+            if not line or line.startswith("#"):
+                continue
+            ats, board = line.split()
+            pairs.append((ats, board))
+    return pairs
+
+
+BOARDS = load_boards(BOARDS_FILE)
 
 
 def get(url, timeout=40):

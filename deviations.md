@@ -162,3 +162,19 @@ Interpretation rule applied to the five stage-2 hits on JSON-LD and meta
 description: all sit in schema.org `JobPosting` objects, none carries a
 second-person directive, role-play frame, wrapper tag, assistant turn or
 "ignore" clause. Adjudicated as false positives on job prose, not instructions.
+
+### Addendum — F4 board identities withheld, 2026-11-13
+
+The published manifest named the fourteen employers sampled: `board`, `url`, and
+the board segment of `key`. That is a statement about the author's job search,
+not about the frame. `results/render-2026-11-10.manifest.jsonl` now carries
+`board_hash` — `sha256(salt + ats + ":" + board)[:12]`, salt in
+`data/f4/board-salt.txt`, untracked — and no URL.
+`scripts/f4/python/redact_manifest.py` reproduces the redaction from the local
+copy, and `fetch_boards.py` reads its board list from `data/f4/boards.txt`
+instead of a literal.
+
+Preserved: 553 rows, 14 distinct hashes, three ATS families, per-page SHA-256,
+byte size and `fetched_at`, so every number in the report stays checkable. Lost:
+re-fetching a board from the repository alone. Rows still group by employer for
+anyone holding the salt.
