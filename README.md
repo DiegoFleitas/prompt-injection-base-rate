@@ -228,6 +228,7 @@ node scripts/f5/scan_eml.js --text=data/f5/text --out=data/f5/flags.csv
 node scripts/f5/make_sheet.js --text=data/f5/text --flags=data/f5/flags.csv \
   --out=data/f5/sheet --csv=data/f5/triage.csv --labels=data/f5/labels.csv
 node scripts/f5/make_pack.js --n=7                    # data/f5/pack-10min.md
+node scripts/f5/apply_labels.js --answers="A=B,B=U"    # human letters -> labels.csv
 node scripts/f5/analyze_eml.js --manifest=data/f5/corpus-manifest.csv \
   --flags=data/f5/flags.csv --out=results/f5-2026-11-13.md \
   --json=results/f5-2026-11-13.summary.json

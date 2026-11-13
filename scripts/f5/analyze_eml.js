@@ -296,7 +296,8 @@ function main() {
           "",
           `Of ${d2Values.candidates} D1 candidates, **${d2Values.labelled}** were read: ` +
             `**${d2Values.positive}** carried a concealed instruction, ` +
-            `${d2Values.unclear} were unclear, ${d2Values.unread} are unread.` +
+            `${d2Values.unclear} ${d2Values.unclear === 1 ? "was" : "were"} unclear, ` +
+            `${d2Values.unread} are unread.` +
             (d2Values.bound_upper === null
               ? ` That is ${pct(d2Values.rate_among_candidates)} of the candidates read.`
               : ` A zero-hit one-sided 95% bound over those ${d2Values.labelled} is **${pct(d2Values.bound_upper)}**.`),
