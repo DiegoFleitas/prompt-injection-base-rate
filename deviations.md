@@ -210,3 +210,24 @@ Deviations from the plan as written:
    would move "only slightly".
 5. **17 self-sent rows found.** Excluding them moves the message-level zero bound
    0.224% → 0.227%; both levels are reported.
+
+## Addendum — F5 instrument location, 2026-11-13 (before the first scan)
+
+`protocol-f5.md` §6 named `scripts/triage.js`'s `classify()` as the reused
+instrument. That is wrong about this codebase: `triage.js` sorts *records* into
+smuggling/context/benign-signature and carries its own copy of the character
+predicates, whereas F1's D1 instrument is `makeClassifier(detector)` +
+`invisibleSummary()` in `scripts/make-sheet.js` — the pair `scripts/selftest.js`
+validates. F5 scans with `make-sheet.js` and uses `triage.js` only for ordering,
+which is what protocol §5 permits ("the triage rule may prioritise; it may not
+decide").
+
+No definition, threshold or channel changed, and the predicates are the same
+lemon-juice ones. Recorded before the first flag was computed.
+
+First scan, same day after the freeze: 653 of 1,338 records carry at least one D1
+row — 644 in the `html` source channel, 11 in `plain`. Priority split: 109
+smuggling, 87 context, 457 benign-signature. E1 surfaces appear in 1,297 records.
+The channel split is recorded here, before adjudication, so the report cannot
+imply a different shape later. Whether the HTML-dominant count is template noise
+or something else is what the human pass decides.
