@@ -289,3 +289,33 @@ senders. The concentration is published as a table in
 `results/f5-2026-11-13.md` (`## Where the positives sit`), because a
 message-level count over this corpus is largely a count of templates.
 
+## Addendum — E2 arm drawn, 2026-11-13 (before any E2 label)
+
+Protocol §9 froze the visible-instruction arm at 100 messages stratified by era;
+nobody had drawn it. It is drawn now, by `scripts/f5/sample_visible.js`, and the
+choices that make it reproducible are recorded here before a single label exists.
+
+- **Draw.** Seed `20261113`, order `sha256(seed:id)` over the 1,321 eligible
+  messages, allocated proportionally to the two eras: **54 primary + 46 stratum**
+  (714/607). The sample file interleaves the eras, so an annotator who stops at
+  30 has 15 + 15, not 30 of one era. No message is re-drawn; the sample is
+  reproducible from the manifest alone.
+- **What E2 reads.** E2 asks about visible words, so the pack shows visible text:
+  `text/plain`, else `plain_quoted`, else the HTML with tags removed and entities
+  decoded. A short plain stub next to a 30 KB HTML body counts as a rendering,
+  not an empty message, so the channel with the most visible text wins. Long URLs
+  collapse to `[url]` and the excerpt is capped at 1,200 chars. D1 judged raw
+  source; E2 judges what a reader sees — the two are deliberately different
+  artifacts and the pack says so in its header.
+- **Judgement rule, written before the read.** Y only if the visible words name
+  the reader as an assistant/agent/model (or reassign its identity) *and* give an
+  action; calls to action aimed at a person, unsubscribe/footer boilerplate,
+  legal notices and quoted mentions of AI do not count.
+- **Labels.** `data/f5/labels-e2.csv`, 100 rows, blank. `analyze_eml.js` reports
+  E2 as `not drawn` / `drawn, not read` / `partial (n of 100)` / `measured`, with
+  per-era counts and the zero-hit one-sided bound for the number actually read.
+  A blank cell is `unread`, never zero.
+
+At the moment of writing, every E2 row is blank; the report prints
+`E2 — drawn, not read`.
+

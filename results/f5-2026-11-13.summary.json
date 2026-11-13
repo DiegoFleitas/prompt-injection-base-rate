@@ -132,6 +132,32 @@
     "p": 0.9765329295987888,
     "status": "census, not an attack signal"
   },
+  "e2": {
+    "status": "unmeasured",
+    "values": {
+      "sampled": 100,
+      "read": 0,
+      "positive": 0,
+      "unclear": 0,
+      "unread": 100,
+      "bound_upper": null,
+      "by_era": [
+        {
+          "era": "primary",
+          "sampled": 54,
+          "read": 0,
+          "positive": 0
+        },
+        {
+          "era": "stratum",
+          "sampled": 46,
+          "read": 0,
+          "positive": 0
+        }
+      ],
+      "annotator": "single"
+    }
+  },
   "d2_d3": {
     "status": "unmeasured",
     "values": {

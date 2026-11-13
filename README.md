@@ -154,6 +154,7 @@ locally — no body reached a model, and no text is published
 | Stratum 2018-05 → 2022-12 | 94 / 607 = 15.5% |
 | E1 machine-only surfaces (alt, comments, `display:none`, tracking) | 1,290 / 1,321 = 97.7% |
 | D2 — concealed instruction | **unmeasured** |
+| E2 — visible instruction to an assistant | **drawn, not read** (100 sampled, 54 primary + 46 stratum) |
 
 The mechanism split is the result: invisible characters live in the HTML source of
 mail templates (BOM, bidi marks, ZWJ/ZWNJ) and almost never in the body text a
@@ -176,6 +177,13 @@ rather than 0, because those are different claims: one is a bound, the other is 
 reading nobody did. The pack for that pass (`data/f5/pack-10min.md`, local-only)
 is cut from the triage sheets and shows one record per sender with the flagged
 characters in context.
+
+E2 — the visible-instruction arm the protocol froze at 100 messages stratified by
+era — is drawn but not read. The draw is deterministic (seed `20261113`, 54
+primary + 46 stratum, interleaved so the first 30 are 15 + 15) and the pack
+(`data/f5/pack-e2-1.md`, `-2.md`) shows visible text rather than MIME source, so
+the read is about what a reader sees. The report prints `E2 — drawn, not read`
+until labels exist, and never a zero.
 
 ## Method in one paragraph
 
@@ -229,6 +237,9 @@ node scripts/f5/make_sheet.js --text=data/f5/text --flags=data/f5/flags.csv \
   --out=data/f5/sheet --csv=data/f5/triage.csv --labels=data/f5/labels.csv
 node scripts/f5/make_pack.js --n=7                    # data/f5/pack-10min.md
 node scripts/f5/apply_labels.js --answers="A=B,B=U"    # human letters -> labels.csv
+node scripts/f5/sample_visible.js --n=100              # E2 draw, 54 primary + 46 stratum
+node scripts/f5/make_visible_pack.js --split=50        # data/f5/pack-e2-{1,2}.md
+node scripts/f5/apply_labels_e2.js --answers="1=N,2=Y:forward"   # E2 letters
 node scripts/f5/analyze_eml.js --manifest=data/f5/corpus-manifest.csv \
   --flags=data/f5/flags.csv --out=results/f5-2026-11-13.md \
   --json=results/f5-2026-11-13.summary.json

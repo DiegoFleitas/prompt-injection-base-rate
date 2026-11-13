@@ -30,11 +30,13 @@ function parseArgs(argv) {
     manifest: "data/f5/corpus-manifest.csv",
     flags: "data/f5/flags.csv",
     labels: "data/f5/labels.csv",
+    e2: "data/f5/labels-e2.csv",
+    e2sample: "data/f5/visible-sample.csv",
     out: "results/f5-2026-11-13.md",
     json: "results/f5-2026-11-13.summary.json",
   };
   for (const arg of argv) {
-    const match = /^--([a-z-]+)=(.*)$/.exec(arg);
+    const match = /^--([a-z0-9-]+)=(.*)$/.exec(arg);
     if (match && match[1] in args) args[match[1]] = match[2];
   }
   return args;
@@ -316,6 +318,73 @@ function main() {
                 "pre-labelling.",
               ]),
         ];
+  // E2 — the visible-instruction arm. Sampled from the manifest, read by the
+  // corpus owner, labels in labels-e2.csv. Same unmeasured/partial/measured
+  // ladder as D2: a blank is never a zero.
+  const e2Sample = fs.existsSync(args.e2sample) ? readCsv(args.e2sample) : [];
+  const e2Labels = fs.existsSync(args.e2) ? readCsv(args.e2) : [];
+  const e2ById = new Map(e2Labels.map((row) => [row.id, row]));
+  const e2Read = e2Sample
+    .map((row) => ({ era: row.era, value: ((e2ById.get(row.id) || {}).e2_visible_instruction || "").trim() }))
+    .filter((row) => row.value === "0" || row.value === "1");
+  const e2Positive = e2Read.filter((row) => row.value === "1");
+  const e2Unclear = e2Sample.filter((row) => {
+    const label = e2ById.get(row.id);
+    return label && (label.e2_visible_instruction || "").trim() === "" && (label.notes || "").trim().length > 0;
+  });
+  const e2Status = e2Read.length === 0 ? "unmeasured" : e2Read.length < e2Sample.length ? "partial" : "measured";
+  const e2ByEra = ["primary", "stratum"].map((era) => {
+    const sampled = e2Sample.filter((row) => row.era === era).length;
+    const read = e2Read.filter((row) => row.era === era);
+    return { era, sampled, read: read.length, positive: read.filter((row) => row.value === "1").length };
+  });
+  const e2Values = {
+    sampled: e2Sample.length,
+    read: e2Read.length,
+    positive: e2Positive.length,
+    unclear: e2Unclear.length,
+    unread: e2Sample.length - e2Read.length - e2Unclear.length,
+    bound_upper: e2Positive.length === 0 && e2Read.length ? cpUpper(0, e2Read.length) : null,
+    by_era: e2ByEra,
+    annotator: "single",
+  };
+
+  const e2Section =
+    e2Sample.length === 0
+      ? [
+          "## E2 — not drawn",
+          "",
+          "The visible-instruction arm is frozen in the protocol (§9: 100 messages,",
+          "stratified by era) and no sample exists in this checkout.",
+          "`scripts/f5/sample_visible.js` draws it deterministically from the manifest.",
+        ]
+      : e2Read.length === 0
+      ? [
+          "## E2 — drawn, not read",
+          "",
+          `${e2Sample.length} messages sampled (${e2ByEra[0].sampled} primary, ${e2ByEra[1].sampled} stratum) and`,
+          "no label exists yet. The pack is local (`data/f5/pack-e2-*.md`); reading is",
+          "human-only (§5), so this cell is `unmeasured`, not zero.",
+        ]
+      : [
+          `## E2 — visible instruction to an assistant (${e2Status}${e2Status === "partial" ? `: ${e2Values.read} of ${e2Values.sampled} read` : ""})`,
+          "",
+          `Of ${e2Values.sampled} sampled messages, **${e2Values.read}** were read: ` +
+            `**${e2Values.positive}** addressed an assistant with an action, ` +
+            `${e2Values.unclear} ${e2Values.unclear === 1 ? "was" : "were"} unclear, ` +
+            `${e2Values.unread} are unread.` +
+            (e2Values.bound_upper === null
+              ? ` That is ${pct(e2Values.positive / e2Values.read)} of those read.`
+              : ` A zero-hit one-sided 95% bound over those ${e2Values.read} is **${pct(e2Values.bound_upper)}**.`),
+          "",
+          "| Era | Sampled | Read | Positive |",
+          "| --- | ---: | ---: | ---: |",
+          ...e2ByEra.map((row) => `| ${row.era} | ${row.sampled} | ${row.read} | ${row.positive} |`),
+          "",
+          "One stratified sample of one inbox, weighted 54/46, not two independent",
+          "populations. Single annotator, no model pre-labelling.",
+        ];
+
   const zeroCheck = cpUpper(0, 290);
   if (Math.abs(zeroCheck - 0.01027) > 0.0005) {
     throw new Error(`zero-count bound drift: 0/290 → ${zeroCheck}`);
@@ -342,6 +411,7 @@ function main() {
       method: `sender-clustered bootstrap, ${REPLICAS} replicas, seed ${SEED}`,
     },
     e1: { records: e1Count, p: e1Count / eligible.length, status: "census, not an attack signal" },
+    e2: { status: e2Status, values: e2Values },
     d2_d3: { status: d2Status, values: d2Values },
     zero_count_convention: { example: "0/290", upper: zeroCheck },
   };
@@ -427,6 +497,8 @@ function main() {
     "",
     ...d2Section,
     "",
+    ...e2Section,
+    "",
     "## Method and limits",
     "",
     `- Intervals: sender-clustered bootstrap, ${REPLICAS.toLocaleString("en-US")} replicas, seed ${SEED}, resampling`,
@@ -454,6 +526,7 @@ function main() {
   console.log(`stratum          : ${pct(windows[1].p)} (${windows[1].k}/${windows[1].n})`);
   console.log(`E1 records       : ${e1Count}/${overall.n}`);
   console.log(`D2 labelled      : ${d2Values.labelled}/${d2Values.candidates} (${d2Values.positive} positive, ${d2Values.unclear} unclear)`);
+  console.log(`E2 read          : ${e2Values.read}/${e2Values.sampled} (${e2Values.positive} positive, ${e2Values.unclear} unclear)`);
   console.log(`written          : ${args.out}`);
   console.log(`json             : ${args.json}`);
 }
