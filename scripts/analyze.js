@@ -81,6 +81,30 @@ function main() {
   const flaggedRows = labelled.filter((row) => flagByid.get(row.id)?.flagged === "1");
   const falsePositives = flaggedRows.filter((row) => row.d2_concealed_instruction !== "1").length;
 
+  // D2 ⊆ D1 in this frame, so every candidate needs a label (or a recorded
+  // capacity screen) before a frame-level rate exists. With a partial sheet the
+  // denominators collapse: 3 labelled candidates would print D1 = 3/3 = 100% and
+  // a rule-of-three bound of 3/3, neither of which is a result. Fail closed.
+  const CANDIDATES = arg("candidates", path.join("data", "d1-candidates.csv"));
+  const candidateRows = readIf(CANDIDATES) ? parseCsv(readIf(CANDIDATES)) : [];
+  const candidateIds = new Set(candidateRows.map((row) => row.id).filter(Boolean));
+  const labelledIds = new Set(labelled.map((row) => row.id));
+  const pendingCandidates = candidateIds.size
+    ? [...candidateIds].filter((id) => !labelledIds.has(id))
+    : [];
+  const labelledCandidates = [...candidateIds].filter((id) => labelledIds.has(id)).length;
+  const partial = pendingCandidates.length > 0;
+  const ALLOW_PARTIAL = process.argv.includes("--allow-partial");
+
+  if (partial && !ALLOW_PARTIAL) {
+    console.error(
+      `LABELS INCOMPLETE — ${labelledCandidates}/${candidateIds.size} candidates labelled, ${pendingCandidates.length} pending.\n` +
+        "A frame-level D1/D2 rate cannot be computed from a partial sheet: the candidate denominator collapses.\n" +
+        "Label the candidates, or pass --allow-partial for a subset report that prints no frame-level bound."
+    );
+    process.exit(2);
+  }
+
   // TODO(annotation run): these are Wilson intervals, which assume independent
   // records. The sample is domain-clustered (290 records, 275 domains, mirrored
   // pages), and `scripts/summarize.js` already corrects for that with a
@@ -88,15 +112,22 @@ function main() {
   // be re-estimated the same way — carry the bootstrap in from summarize.js
   // rather than reporting a Wilson interval that is too narrow. Recorded as a
   // known gap in RESPONSIBLE-RESEARCH.md.
-  const pInstr = wilson(d2, n);
-  const pAny = wilson(d1, n);
-  const fp = wilson(falsePositives, flaggedRows.length);
+  const frameN = sample.length;
+  const pFrame = d2 / frameN;
+  const d1Frame = candidateIds.size || d1;
+  const pAnyFrame = wilson(d1Frame, frameN);
+  const flaggedFrame = flagRows.filter((row) => row.flagged === "1");
+  const fp = wilson(falsePositives, flaggedFrame.length);
 
-  // Rule of three: with zero hits, the 95% upper bound is about 3/n.
-  const ruleOfThree = n ? Math.min(1, 3 / n) : 1;
-  const upperBound = d2 === 0 ? ruleOfThree : pInstr.hi;
-  const fpPoint = flaggedRows.length ? falsePositives / flaggedRows.length : 0;
-  const snr = fpPoint > 0 ? pInstr.p / fpPoint : null;
+  // Rule of three: with zero hits, the 95% upper bound is about 3/n. The
+  // pre-registered p_instr has N = the sample (protocol §5), so the bound the
+  // decision rule uses is 3/290; 3/34 is the bound among eligible candidates and
+  // is reported beside it, because that is the denominator a reader needs.
+  const upperFrame = d2 === 0 ? Math.min(1, 3 / frameN) : wilson(d2, frameN).hi;
+  const upperEligible = d2 === 0 && candidateIds.size ? Math.min(1, 3 / candidateIds.size) : null;
+  const upperBound = upperFrame;
+  const fpPoint = flaggedFrame.length ? falsePositives / flaggedFrame.length : 0;
+  const snr = fpPoint > 0 ? pFrame / fpPoint : null;
 
   // FPR cannot be estimated from a handful of flags: with 0 or 1 flags the point
   // estimate is 0 or 1 by construction, which would make K2 fire trivially
@@ -109,23 +140,27 @@ function main() {
   if (!n) {
     verdict = "INCOMPLETE — no labelled records yet.";
     rule = "Finish labels.csv first.";
-  } else if (!canEstimateFpr && flaggedRows.length === 0) {
+  } else if (partial) {
+    verdict = `INCOMPLETE — ${labelledCandidates}/${candidateIds.size} candidates labelled.`;
+    rule =
+      "a frame-level D1/D2 rate is not computable from a partial sheet; these counts describe only the labelled rows.";
+  } else if (!canEstimateFpr && flaggedFrame.length === 0) {
     // This is not "inconclusive because we need more data" in the ordinary
     // sense: the detector emitted no flags at all, so it has no operating point
     // on this frame and no FPR exists to compare against. Recorded separately so
     // the K3 is not mistaken for a near-miss.
     verdict =
       "K3 (structural) — the detector has no operating point on this frame, so neither K1 nor K2 is evaluable.";
-    rule = `0 of ${n} records were flagged, so FPR is undefined rather than small. The decision rule needs a detector that fires; report the descriptive result and treat K1/K2 as inapplicable unless F3/F4 produce flags.`;
+    rule = `the detector flagged 0 of ${frameN} records, so FPR is undefined rather than small. The decision rule needs a detector that fires; report the descriptive result and treat K1/K2 as inapplicable unless F3/F4 produce flags.`;
   } else if (!canEstimateFpr) {
     verdict = "K3 — inconclusive: too few detector flags to estimate a false-positive rate.";
-    rule = `only ${flaggedRows.length} flagged record(s); at least ${MIN_FLAGS_FOR_FPR} are needed for an FPR-based decision. Run F3/F4 or a larger F1 sample before deciding.`;
+    rule = `only ${flaggedFrame.length} flagged record(s); at least ${MIN_FLAGS_FOR_FPR} are needed for an FPR-based decision. Run F3/F4 or a larger F1 sample before deciding.`;
   } else if (upperBound <= fpPoint) {
     verdict = "K1 — the consumer-protection framing dies on its own numbers.";
     rule = `upper bound of concealed-instruction prevalence (${pct(upperBound)}) ≤ detector FPR (${pct(fpPoint)}).`;
-  } else if (pInstr.p >= 5 * fpPoint && d2 > 0) {
+  } else if (pFrame >= 5 * fpPoint && d2 > 0) {
     verdict = "K2 — an ingest-boundary tool is justified; continue as a library, not a consumer shield.";
-    rule = `prevalence (${pct(pInstr.p)}) ≥ 5 × FPR (${pct(fpPoint)}).`;
+    rule = `prevalence (${pct(pFrame)}) ≥ 5 × FPR (${pct(fpPoint)}).`;
   } else {
     verdict = "K3 — inconclusive. Run F3/F4 before deciding; do not redesign detectors on the way.";
     rule = `upper bound (${pct(upperBound)}) > FPR (${pct(fpPoint)}), and the point estimate is not ≥ 5×.`;
@@ -134,17 +169,28 @@ function main() {
   const report = [
     "# Base-rate study — report",
     "",
-    `Records sampled: **${sample.length}** · labelled: **${n}** · notes label: **${labelled.length === sample.length ? "complete" : "partial"}**`,
+    `Records sampled: **${sample.length}** · labelled: **${n}** · candidates labelled: **${candidateIds.size ? `${labelledCandidates}/${candidateIds.size}` : "n/a"}**`,
+    "",
+    "Descriptive numbers come from `scripts/summarize.js`; this report applies the",
+    "pre-registered decision rule to the labels and flags.",
     "",
     "| Quantity | Value |",
     "| --- | --- |",
-    `| D1 concealed text (mechanical) | ${d1}/${n} — ${fmt(pAny)} |`,
-    `| **D2 concealed instruction** | **${d2}/${n} — ${fmt(pInstr)}** |`,
-    `| D2 95% upper bound used | ${pct(upperBound)} |`,
-    `| D3 directive, no action | ${d3}/${n} |`,
-    `| Detector flagged | ${flaggedRows.length}/${n} |`,
-    `| Detector false positives | ${falsePositives}/${flaggedRows.length || 0} — ${fmt(fp)} |`,
-    `| Signal / noise | ${snr === null ? "n/a (no flags)" : snr.toFixed(2)} |`,
+    ...(partial
+      ? [
+          `| **D2 concealed instruction (among ${n} labelled candidates)** | **${d2}/${n}** |`,
+          `| D3 directive, no action (among labelled) | ${d3}/${n} |`,
+          "| D1, detector flags, FPR, signal / noise | not computed (partial labels) |",
+        ]
+      : [
+          `| D1 concealed text (mechanical) | ${d1Frame}/${frameN} — ${fmt(pAnyFrame)} |`,
+          `| **D2 concealed instruction** | **${d2}/${candidateIds.size || frameN} candidates · ${d2}/${frameN} frame** |`,
+          `| D2 95% upper bounds | ${upperEligible ? `${pct(upperEligible)} eligible (0/${candidateIds.size}) · ` : ""}${pct(upperFrame)} frame (0/${frameN}); the rule uses the frame bound |`,
+          `| D3 directive, no action | ${d3}/${n} |`,
+          `| Detector flagged | ${flaggedFrame.length}/${frameN} |`,
+          `| Detector false positives | ${falsePositives}/${flaggedFrame.length} — ${fmt(fp)} |`,
+          `| Signal / noise | ${snr === null ? "n/a (no flags)" : snr.toFixed(2)} |`,
+        ]),
     "",
     "## Verdict (pre-registered rule, section 6)",
     "",

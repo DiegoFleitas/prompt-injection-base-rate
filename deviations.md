@@ -99,6 +99,20 @@ These add documentation and one corrected reading; no analytic decision changed.
     the report, the README and `RESPONSIBLE-RESEARCH.md`: D2 = 0 is scoped to
     documents that contain an invisible character, and 256 of 290 documents were
     never in D2 scope at all.
+12. **D2 coverage recorded as it was (2026-11-13)**: `labels.csv` contains 3 rows,
+    not 34. The 3 triaged `context` candidates were read end to end; the 31
+    `benign-signature` candidates were screened by mechanism (89 invisible
+    characters, each matching a known rendering or text-assembly signature) and not
+    read. The 30-record D1 audit and the 10% same-annotator re-label in protocol §4
+    were not executed. The README's "human adjudication of the 34 candidates" was
+    corrected to match. Consequence: D2 = 0/34 is conditional on the screen; the
+    close-read result is 0/3 (one-sided 95% UB 63.2%). Recorded in
+    `results/d2-report.md`.
+13. **Zero-count interval convention fixed (2026-11-13)**: the F1 detector row read
+    0.0–1.3% (the 3.84/n normal approximation) while F4 read 0.54% for the same
+    kind of zero (one-sided exact). The convention is one-sided exact
+    Clopper–Pearson throughout: 0/290 → 1.0%, 0/553 → 0.54%, 0/34 → 8.4%, 0/3 →
+    63.2%. Reporting correction only; no decision rule changed.
 
 ## Known limitations carried forward
 
@@ -108,8 +122,10 @@ These add documentation and one corrected reading; no analytic decision changed.
 - The instrument only inspects documents with an invisible character: visible
   instructions and visible encodings (base64, emoji) are outside its reach by
   construction, and 88.3% of the sample was never examined for D2.
-- WET cannot see comments, attributes, or CSS-hidden text; frames F3/F4 remain
-  unrun and are VM-only.
+- D2 rests on 3 close reads plus 31 signature screens: no D1 audit, no second
+  annotator, no agreement statistic (see `results/d2-report.md`).
+- WET cannot see comments, attributes, or CSS-hidden text; F3 remains unrun, and
+  F4 ran on job postings only (run log below).
 - One crawl, one PRNG seed, one extraction pipeline. Reported as "agent-ingest
   text", never "the web".
 - Languages are not identified, only scripts.

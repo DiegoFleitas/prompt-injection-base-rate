@@ -11,6 +11,9 @@ Frame: F1-wet (Common Crawl plain-text extraction)
 | **D1 — records with an invisible code point** | **34/290 = 11.7%** (95% CI 8.5–15.9%) |
 | Detector flagged at suspicious or worse | 0/290 = 0% (95% CI 0–1.3%) |
 
+> Interval note: this snapshot used the 3.84/n approximation. The final report uses
+> one-sided exact Clopper–Pearson (`0/290 → 1.0%`); see `../deviations.md` item 13.
+
 Per-record mechanism counts:
 
 | Mechanism | Records |

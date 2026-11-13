@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+message: "F1 is pre-registered; the sensitivity control is a post-hoc addition; F4 is exploratory and must not be cited without its caveat."
+type: report
+title: "prompt-injection-base-rate"
+abstract: >-
+  A pre-registered measurement of one concealment channel in 290 Common Crawl WET
+  records: 34 (11.7%) carried an invisible code point, and the concealment channel
+  carried no instruction in the 34 documents where it could exist (3 read closely,
+  31 screened by a benign mechanism signature; 0/3, one-sided 95% upper bound
+  63.2%). The instrument cannot see visible, base64 or emoji-encoded instructions,
+  and 256 of 290 records were never examined for D2. A later F4 frame on 553 job
+  postings is exploratory, not pre-registered, and its 2.9% figure is a
+  sensitivity-adjusted upper bound, not a prevalence estimate.
+authors:
+  - family-names: Fleitas
+    given-names: Diego
+repository-code: "https://github.com/DiegoFleitas/prompt-injection-base-rate"
+url: "https://github.com/DiegoFleitas/prompt-injection-base-rate"
+license: CC-BY-4.0
+keywords:
+  - prompt injection
+  - base rate
+  - invisible unicode
+  - agent security
+  - reproducibility

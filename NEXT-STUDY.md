@@ -65,10 +65,11 @@ pages with text a reader cannot see, 0 instruction-shaped concealed strings out 
 the frames above:
 
 - **The page-side question is close to answered for reading surfaces.** Concealment
-  is five times more common in markup than in extracted text and it is UI state,
-  not payload. What remains worth measuring is *how often an ingestion pipeline
-  pulls that text in* (median 3,290 extra characters per page in F4), because that
-  is where a page-side defence could still have a number.
+  is far more common in markup than in extracted text (different populations and
+  units, so not a like-for-like ratio), and it is UI state, not payload. What
+  remains worth measuring is *how often an ingestion pipeline pulls that text in*
+  (median 3,290 extra characters per page in F4), because that is where a
+  page-side defence could still have a number.
 - **Sensitivity, not n, is the binding constraint.** 0 detections with 18.8%
   end-to-end recall bounds prevalence at 2.9%, not 0.5%. Any G1–G3 run must
   measure its own recall against independently authored payloads, or its null
