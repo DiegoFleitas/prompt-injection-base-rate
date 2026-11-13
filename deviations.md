@@ -178,3 +178,35 @@ Preserved: 553 rows, 14 distinct hashes, three ATS families, per-page SHA-256,
 byte size and `fetched_at`, so every number in the report stays checkable. Lost:
 re-fetching a board from the repository alone. Rows still group by employer for
 anyone holding the salt.
+
+## Run log — F5 freeze, 2026-11-13 (pre-registered, before any body was read)
+
+| | |
+| --- | --- |
+| protocol | `protocol-f5.md`, SHA-256 `76f3ef1fee9fbddc4fd4d3c62c2da19019dffcb9ffd7cbbb69b8d3141e516d1e` |
+| corpus snapshot | `data/f5/corpus.sha256` — 894 files, aggregate digest `8d1c4bb1ee5e4f953dc5b32a936f2b2e0beaddf18d5bf45b18a8f62f73837cbb` |
+| manifest | 1,338 unique messages (1,390 read, 52 duplicates), 48 senders, 17 self-sent |
+| window | 2023-01-01 → 2026-07-18 primary; 2018-05..2022-12-31 separate stratum |
+
+**No message body was decoded, rendered or read before this hash was recorded.**
+Precisely: the Task 0 manifest parsed headers only (`headersonly=True`) and read
+message bytes solely to compute SHA-256; the snapshot digest covers those same
+bytes.
+
+Deviations from the plan as written:
+
+1. **`.gitignore` was not edited.** The root file already ignores `data/`, so a
+   `data/f5/` line would be redundant; `git status` shows no file under `data/f5/`.
+2. **The freeze sentence was corrected.** The plan asked for "No message body was
+   read before this hash was recorded". Byte-level hashing necessarily reads the
+   body, so the accurate sentence above replaces it. This discloses exactly what
+   touched the bytes instead of overclaiming.
+3. **The self-address list came from the Thunderbird identity**
+   (`mail.identity.id1.useremail`), not from typing, so the `self` flag does not
+   rest on a typo. The address stays in `data/f5/self-addresses.txt` and appears
+   in no tracked file.
+4. **Sender count is 48, not 44.** The earlier 44 was mbox-only. The
+   sender-clustered zero bound moves 6.58% → 6.05%, as the plan anticipated it
+   would move "only slightly".
+5. **17 self-sent rows found.** Excluding them moves the message-level zero bound
+   0.224% → 0.227%; both levels are reported.
