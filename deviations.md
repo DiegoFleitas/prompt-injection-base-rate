@@ -211,6 +211,28 @@ Deviations from the plan as written:
 5. **17 self-sent rows found.** Excluding them moves the message-level zero bound
    0.224% → 0.227%; both levels are reported.
 
+## Amendment — disclosure redaction, 2026-11-13 (after freeze, before merge)
+
+The hash in the freeze row above no longer matches `protocol-f5.md`. Three
+sentences in §1 and §2 described the author's machine and tooling instead of the
+frame: an agent product name, a local archive path, two mailbox folder names and
+an operating system. They were replaced with the equivalent role description.
+
+| | SHA-256 of `protocol-f5.md` |
+| --- | --- |
+| frozen text | `76f3ef1fee9fbddc4fd4d3c62c2da19019dffcb9ffd7cbbb69b8d3141e516d1e` |
+| redacted text | `407fac20d7eb75240015aaa2fe9e3456d52b771697cf978ca555c133b56c3d3b` |
+
+What did not change: no definition (D1–D3, E1–E2), threshold, window, unit,
+cluster rule, instrument or analysis step, and no number in
+`results/f5-2026-11-13.md` or `results/f5-2026-11-13.summary.json`. The six
+decisions fixed at freeze stand as recorded; this edit touches none of them. The
+original hash stays in the freeze row so the move is legible, because a hash
+that changes without a note is worth less than no hash.
+
+`tests/f5/fixtures/README.md` lost the same operating-system detail in the same
+commit. That file is prose about how the fixtures are built, not a fixture.
+
 ## Publication decision — F5 without D2, 2026-11-13
 
 The mechanism counts (D1, E1) are published in `results/f5-2026-11-13.md` while

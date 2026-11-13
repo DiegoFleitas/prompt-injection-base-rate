@@ -15,9 +15,9 @@ address left the machine, and no model saw any of it.
 
 ## 1. Safety and ethics
 
-1. **No email text goes to a model or an agent.** Not to Hermes, not to an API,
-   not with tools disabled. Adjudication is a human reading a local file. This is
-   `protocol.md` §1 applied to a corpus that contains third-party PII.
+1. **No email text goes to a model or an agent.** Not to a hosted model, an API,
+   or an agent with tool access. Adjudication is a human reading a local file.
+   This is `protocol.md` §1 applied to a corpus that contains third-party PII.
 2. Raw mail never enters git. `data/` is ignored; the snapshot, decoded text,
    sheets and labels stay under `data/f5/`.
 3. No subjects, display names, addresses or domains in results. Sender identity
@@ -36,13 +36,13 @@ Job-related mail already on disk, as of the 2026-11-13 snapshot:
 | Source | Content | Messages |
 | --- | --- | ---: |
 | Thunderbird `Trabajo` mbox | live IMAP cache, copied | 1,005 |
-| WSL job-alert archive (`gmail-to-markdown/archive`) | `.eml`, 2026-02..2026-07 | 385 |
+| Local job-alert archive | `.eml`, 2026 | 385 |
 | **union after Message-ID dedup** | 52 messages appear in both | **1,338** |
 
 **This is a convenience census of one inbox, not a probability sample of job
-mail.** Every result says so. Excluded by design: `INBOX` (1.76 GB), `Sent`,
-drafts/trash, `SAS` and `proyecto` folders, all attachment contents, and the 59
-Windows `.eml` copies used only as an overlap check.
+mail.** Every result says so. Excluded by design: `INBOX`, `Sent`,
+drafts/trash, three other folders, all attachment contents, and the 59 `.eml`
+copies from a second machine used only as an overlap check.
 
 Five sender addresses account for the bulk of both sources, and messages from one
 sender are near-duplicates of one template. The honest unit count is **48 sender
