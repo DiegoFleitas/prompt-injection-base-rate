@@ -211,6 +211,21 @@ Deviations from the plan as written:
 5. **17 self-sent rows found.** Excluding them moves the message-level zero bound
    0.224% → 0.227%; both levels are reported.
 
+## Publication decision — F5 without D2, 2026-11-13
+
+The mechanism counts (D1, E1) are published in `results/f5-2026-11-13.md` while
+the instruction rate (D2) is `unmeasured`. D2 requires a human reading pass over
+the 109 `smuggling` candidates — 1,016 KB of sheets — and that pass was not run.
+The alternatives were to publish a model-screened number, which would change what
+the frame measures, or to publish no instruction number at all. The second option
+is taken, and the absence is stated in the report, the README and the summary JSON
+(`d2_d3.status = "unmeasured"`).
+
+Consequence: F5 supports no claim about concealed instructions in mail. It
+supports claims about where invisible characters live in mail — HTML source at
+48.8% against plain body at 0.83% — at one-inbox scope, with the sender-clustered
+interval (21.7–86.5%) attached.
+
 ## Addendum — F5 instrument location, 2026-11-13 (before the first scan)
 
 `protocol-f5.md` §6 named `scripts/triage.js`'s `classify()` as the reused

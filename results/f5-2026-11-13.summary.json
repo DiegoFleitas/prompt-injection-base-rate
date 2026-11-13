@@ -110,7 +110,7 @@
     "status": "census, not an attack signal"
   },
   "d2_d3": {
-    "status": "pending human annotation",
+    "status": "unmeasured",
     "values": null
   },
   "zero_count_convention": {

@@ -26,7 +26,9 @@ postings, and it is exploratory.
 
 **Evidence tiers.** F1 is pre-registered (`protocol.md`); the sensitivity control
 is a post-hoc addition (`results/sensitivity-report.md`); F4 is exploratory
-(`deviations.md`).
+(`deviations.md`); F5 is pre-registered (`protocol-f5.md`, frozen before any
+message body was decoded) and publishes its mechanism counts with the instruction
+rate **unmeasured**.
 
 ## Result
 
@@ -131,6 +133,41 @@ bounds concealed instructions at **≤2.9%** (95%), not the 0.54% a perfect
 classifier would give. PPV: 1.7% for the channel alone at 1% prevalence, 25.9%
 gated on instruction shape, 3.2% on a 90.5%-data-injection mix.
 
+### F5 frame — job-related mail on disk, 1,338 messages (2026-11-13, pre-registered)
+
+F1 and F4 sample what an agent reads from the web. F5 asks the same question of
+mail an agent would read on the user's behalf: 1,005 messages from a Thunderbird
+`Trabajo` mbox plus 385 `.eml` job alerts, deduplicated by `Message-ID` to
+**1,338** unique messages from 48 sender addresses. Everything is processed
+locally — no body reached a model, and no text is published
+([`protocol-f5.md`](protocol-f5.md), [`results/f5-2026-11-13.md`](results/f5-2026-11-13.md)).
+
+| Quantity | Value |
+| --- | --- |
+| Unique messages after dedup | 1,338 (1,390 read, 52 in both sources) |
+| Eligible, self-sent excluded | 1,321 over 47 sender clusters |
+| D1 — ≥1 invisible code point, message level | **653 / 1,321 = 49.4%** |
+| — sender-clustered 95% interval | **21.7–86.5%** (two senders own 65% of messages) |
+| — `text/html` source channel | 644 / 1,321 = 48.8% |
+| — `text/plain` body | **11 / 1,321 = 0.83%** |
+| Primary window 2023-01 → 2026-07 | 559 / 714 = 78.3% |
+| Stratum 2018-05 → 2022-12 | 94 / 607 = 15.5% |
+| E1 machine-only surfaces (alt, comments, `display:none`, tracking) | 1,290 / 1,321 = 97.7% |
+| D2 — concealed instruction | **unmeasured** |
+
+The mechanism split is the result: invisible characters live in the HTML source of
+mail templates (BOM, bidi marks, ZWJ/ZWNJ) and almost never in the body text a
+reader sees — 48.8% against 0.83%. The message-level rate is not usable as a
+prevalence: two senders account for 65% of the corpus and the sender-clustered
+interval says so. The era gap holds inside both sources (77.2% vs 15.5% in the
+mbox alone) but spans 41 sender clusters against 9, so it is reported as a
+stratification, not a trend.
+
+D2 was not adjudicated. The protocol requires a human reading pass over the 109
+`smuggling` candidates, and that pass was not run. The report says `unmeasured`
+rather than 0, because those are different claims: one is a bound, the other is a
+reading nobody did.
+
 ## Method in one paragraph
 
 Common Crawl WET is plain-text extraction of real pages — approximately what a
@@ -167,6 +204,29 @@ python markup_scan.py  --shard 0 --of 4      # attributes / JSON-LD / meta / tem
 python analyze_render2.py && python ppv.py   # aggregates + inference
 ```
 
+F5 frame (mail; local-only, no network, no model — every command reads
+`data/f5/`, which is git-ignored):
+
+```sh
+python scripts/f5/manifest.py --root=data/f5/corpus --out=data/f5/corpus-manifest.csv \
+  --salt=data/f5/salt.txt --self=data/f5/self-addresses.txt --corpus-sha256=data/f5/corpus.sha256
+python scripts/f5/extract_eml.py --root=data/f5/corpus --out=data/f5/text \
+  --index=data/f5/index.csv --salt=data/f5/salt.txt --self=data/f5/self-addresses.txt
+python -m unittest discover -s tests/f5 -t . -v     # 6 tests
+node scripts/f5/selftest.js                          # wiring + interval maths
+node scripts/f5/scan_eml.js --text=data/f5/text --out=data/f5/flags.csv
+node scripts/f5/make_sheet.js --text=data/f5/text --flags=data/f5/flags.csv \
+  --out=data/f5/sheet --csv=data/f5/triage.csv --labels=data/f5/labels.csv
+node scripts/f5/analyze_eml.js --manifest=data/f5/corpus-manifest.csv \
+  --flags=data/f5/flags.csv --out=results/f5-2026-11-13.md \
+  --json=results/f5-2026-11-13.summary.json
+```
+
+The manifest verifies with `cd data/f5/corpus && sha256sum -c ../corpus.sha256`
+(894/894 OK). Analysis is deterministic: rerunning it reproduces
+`results/f5-2026-11-13.summary.json` byte for byte (2,000-replica bootstrap, seed
+`20261113`).
+
 `triage.js` is a prioritisation aid, not a label: it writes no verdicts and the
 sheets are still the thing to read. On the 2026-10-26 sample it flagged 3 of the
 34 candidates for close reading and 0 smuggling-channel candidates — which is
@@ -191,7 +251,9 @@ Whether a model is actually fooled (no model calls by design); multi-turn or
 tool-loop attacks; harm. One crawl, one seed, one extraction pipeline — this is
 "agent-ingest text", never "the web". The markup surfaces F1 cannot see are
 covered by the F4 frame above, but only for job postings, and only with the CSS
-mechanisms that frame models.
+mechanisms that frame models. F5 adds one inbox to that list: 47 sender clusters,
+mail already on one disk, HTML judged as source rather than rendered, and an
+instruction rate that was **not measured** rather than measured at zero.
 
 **And, measured by the sensitivity control** (`results/sensitivity-report.md`):
 the detector only inspects documents that carry an invisible character, so 256
@@ -243,6 +305,9 @@ bound, not a prevalence estimate." It must not be cited as a web-wide rate.
 | `scripts/` | sampler, sheet generator, summarizer, analysis, selftest |
 | `scripts/sensitivity/` | positive control: constructed channels (P1) + InjecAgent and BIPIA payloads (P2/P2b), see `results/sensitivity-report.md` |
 | `scripts/f4/` | rendered-concealment frame — run 2026-11-10 (553 pages); result in `results/render-2026-11-10.md`, Python implementation in `scripts/f4/python/` |
+| `protocol-f5.md` | F5 mail frame, frozen 2026-11-13 before any body was decoded |
+| `scripts/f5/` | mail frame: manifest, MIME extractor, scanner, sheet, analysis |
+| `results/f5-2026-11-13.md` | F5 mechanism counts and clustered intervals; D2 unmeasured |
 | `data/`, `sheet/`, `labels.csv` | local only, git-ignored |
 
 ## License
