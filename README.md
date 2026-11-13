@@ -154,7 +154,7 @@ locally — no body reached a model, and no text is published
 | Stratum 2018-05 → 2022-12 | 94 / 607 = 15.5% |
 | E1 machine-only surfaces (alt, comments, `display:none`, tracking) | 1,290 / 1,321 = 97.7% |
 | D2 — concealed instruction | **unmeasured** |
-| E2 — visible instruction to an assistant | **drawn, not read** (100 sampled, 54 primary + 46 stratum) |
+| E2 — visible instruction to an assistant | **0 / 30 read** (95% bound 9.50%); 70 unread of 100 sampled |
 
 The mechanism split is the result: invisible characters live in the HTML source of
 mail templates (BOM, bidi marks, ZWJ/ZWNJ) and almost never in the body text a
@@ -179,11 +179,11 @@ is cut from the triage sheets and shows one record per sender with the flagged
 characters in context.
 
 E2 — the visible-instruction arm the protocol froze at 100 messages stratified by
-era — is drawn but not read. The draw is deterministic (seed `20261113`, 54
-primary + 46 stratum, interleaved so the first 30 are 15 + 15) and the pack
-(`data/f5/pack-e2-1.md`, `-2.md`) shows visible text rather than MIME source, so
-the read is about what a reader sees. The report prints `E2 — drawn, not read`
-until labels exist, and never a zero.
+era — is drawn and partly read: the first 30 blocks of `pack-e2-1.md` (15 primary
++ 15 stratum, eras interleaved) were read and **none** carried a visible
+instruction addressed to an assistant, which bounds exposure at **9.50%** (95%,
+one-sided). 70 blocks remain unread. The count assumption and its one-command
+correction are recorded in `deviations.md` under `Annotation log — E2 first pass`.
 
 ## Method in one paragraph
 

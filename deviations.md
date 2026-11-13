@@ -319,3 +319,27 @@ choices that make it reproducible are recorded here before a single label exists
 At the moment of writing, every E2 row is blank; the report prints
 `E2 — drawn, not read`.
 
+## Annotation log — E2 first pass, 2026-11-13
+
+The corpus owner read blocks of `data/f5/pack-e2-1.md` and reported finding no
+visible instruction addressed to an assistant in any of them: no `Y`, no `U`.
+The number of blocks read was not stated, so the pass is recorded as **blocks
+01–30** — the range printed in the command they were given. The assumption is
+written here rather than left implicit.
+
+As recorded: E2 `partial (30 of 100)`, **0 positive**, 15 primary + 15 stratum,
+zero-hit one-sided bound **9.50%**. The 30 blocks are 15 primary and 15 stratum
+because the sample interleaves the eras, so the partial read is already
+era-balanced.
+
+The count is correctable in one command, and correcting it is expected if the
+assumption is wrong:
+
+- read fewer than 30 → `node scripts/f5/apply_labels_e2.js --clear=K-100` blanks
+  every label from K on, so only what was actually read stays counted;
+- read more than 30 → `node scripts/f5/apply_labels_e2.js --range=31-N --answer=N`.
+
+No label exists for any block outside the range the annotator was told to answer.
+D2 (`labels.csv`) is untouched by this pass: the concealed-instruction question
+has not been read at all.
+

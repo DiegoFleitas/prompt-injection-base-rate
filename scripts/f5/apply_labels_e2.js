@@ -32,6 +32,7 @@ function parseArgs(argv) {
     answers: "",
     range: "",
     answer: "",
+    clear: "",
   };
   for (const arg of argv) {
     const match = /^--([a-z-]+)=(.*)$/.exec(arg);
@@ -118,12 +119,37 @@ function main() {
     for (let n = from; n <= to; n += 1) answers.push(`${n}=${args.answer}`);
     answers = answers.join(",");
   }
-  if (!answers) {
-    console.log("nothing to apply: pass --answers=\"1=N,2=Y:forward\" or --range=1-30 --answer=N");
+  if (!answers && !args.clear) {
+    console.log("nothing to apply: pass --answers=\"1=N,2=Y:forward\", --range=1-30 --answer=N, or --clear=31-100");
     return;
   }
 
   const ids = numberToId(packParts(args.pack));
+
+  // Clearing is a first-class operation: a label written on a block nobody
+  // read has to be removable without hand-editing rows.
+  if (args.clear) {
+    const match = /^(\d+)-(\d+)$/.exec(args.clear);
+    if (!match) throw new Error("--clear must look like 31-100");
+    const cleared = [];
+    const lines = fs.readFileSync(args.labels, "utf8").replace(/\r\n/g, "\n").split("\n");
+    const header = splitCsv(lines[0]);
+    const at = Object.fromEntries(HEADER.map((name) => [name, header.indexOf(name)]));
+    for (let n = Number(match[1]); n <= Number(match[2]); n += 1) {
+      const id = ids.get(n);
+      if (!id) continue;
+      const rowIndex = lines.findIndex((line, index) => index > 0 && splitCsv(line)[at.id] === id);
+      if (rowIndex < 0) continue;
+      const cells = splitCsv(lines[rowIndex]);
+      cells[at.e2_visible_instruction] = "";
+      cells[at.action_class] = "";
+      lines[rowIndex] = joinCsv(cells);
+      cleared.push(n);
+    }
+    fs.writeFileSync(args.labels, lines.join("\n"));
+    console.log(`cleared  : ${cleared.length ? `${cleared[0]}-${cleared[cleared.length - 1]}` : "nothing"}`);
+    return;
+  }
   const pairs = answers
     .split(",")
     .map((piece) => piece.trim())

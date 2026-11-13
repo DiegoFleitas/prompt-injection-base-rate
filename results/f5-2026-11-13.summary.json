@@ -133,25 +133,25 @@
     "status": "census, not an attack signal"
   },
   "e2": {
-    "status": "unmeasured",
+    "status": "partial",
     "values": {
       "sampled": 100,
-      "read": 0,
+      "read": 30,
       "positive": 0,
       "unclear": 0,
-      "unread": 100,
-      "bound_upper": null,
+      "unread": 70,
+      "bound_upper": 0.09503385285530414,
       "by_era": [
         {
           "era": "primary",
           "sampled": 54,
-          "read": 0,
+          "read": 15,
           "positive": 0
         },
         {
           "era": "stratum",
           "sampled": 46,
-          "read": 0,
+          "read": 15,
           "positive": 0
         }
       ],
