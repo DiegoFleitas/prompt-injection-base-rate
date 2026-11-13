@@ -178,3 +178,190 @@ Preserved: 553 rows, 14 distinct hashes, three ATS families, per-page SHA-256,
 byte size and `fetched_at`, so every number in the report stays checkable. Lost:
 re-fetching a board from the repository alone. Rows still group by employer for
 anyone holding the salt.
+
+## Run log — F5 freeze, 2026-11-13 (pre-registered, before any body was read)
+
+| | |
+| --- | --- |
+| protocol | `protocol-f5.md`, SHA-256 `76f3ef1fee9fbddc4fd4d3c62c2da19019dffcb9ffd7cbbb69b8d3141e516d1e` |
+| corpus snapshot | `data/f5/corpus.sha256` — 894 files, aggregate digest `8d1c4bb1ee5e4f953dc5b32a936f2b2e0beaddf18d5bf45b18a8f62f73837cbb` |
+| manifest | 1,338 unique messages (1,390 read, 52 duplicates), 48 senders, 17 self-sent |
+| window | 2023-01-01 → 2026-07-18 primary; 2018-05..2022-12-31 separate stratum |
+
+**No message body was decoded, rendered or read before this hash was recorded.**
+Precisely: the Task 0 manifest parsed headers only (`headersonly=True`) and read
+message bytes solely to compute SHA-256; the snapshot digest covers those same
+bytes.
+
+Deviations from the plan as written:
+
+1. **`.gitignore` was not edited.** The root file already ignores `data/`, so a
+   `data/f5/` line would be redundant; `git status` shows no file under `data/f5/`.
+2. **The freeze sentence was corrected.** The plan asked for "No message body was
+   read before this hash was recorded". Byte-level hashing necessarily reads the
+   body, so the accurate sentence above replaces it. This discloses exactly what
+   touched the bytes instead of overclaiming.
+3. **The self-address list came from the Thunderbird identity**
+   (`mail.identity.id1.useremail`), not from typing, so the `self` flag does not
+   rest on a typo. The address stays in `data/f5/self-addresses.txt` and appears
+   in no tracked file.
+4. **Sender count is 48, not 44.** The earlier 44 was mbox-only. The
+   sender-clustered zero bound moves 6.58% → 6.05%, as the plan anticipated it
+   would move "only slightly".
+5. **17 self-sent rows found.** Excluding them moves the message-level zero bound
+   0.224% → 0.227%; both levels are reported.
+
+## Amendment — disclosure redaction, 2026-11-13 (after freeze, before merge)
+
+The hash in the freeze row above no longer matches `protocol-f5.md`. Three
+sentences in §1 and §2 described the author's machine and tooling instead of the
+frame: an agent product name, a local archive path, two mailbox folder names and
+an operating system. They were replaced with the equivalent role description.
+
+| | SHA-256 of `protocol-f5.md` |
+| --- | --- |
+| frozen text | `76f3ef1fee9fbddc4fd4d3c62c2da19019dffcb9ffd7cbbb69b8d3141e516d1e` |
+| redacted text | `407fac20d7eb75240015aaa2fe9e3456d52b771697cf978ca555c133b56c3d3b` |
+
+What did not change: no definition (D1–D3, E1–E2), threshold, window, unit,
+cluster rule, instrument or analysis step, and no number in
+`results/f5-2026-11-13.md` or `results/f5-2026-11-13.summary.json`. The six
+decisions fixed at freeze stand as recorded; this edit touches none of them. The
+original hash stays in the freeze row so the move is legible, because a hash
+that changes without a note is worth less than no hash.
+
+`tests/f5/fixtures/README.md` lost the same operating-system detail in the same
+commit. That file is prose about how the fixtures are built, not a fixture.
+
+## Publication decision — F5 without D2, 2026-11-13
+
+The mechanism counts (D1, E1) are published in `results/f5-2026-11-13.md` while
+the instruction rate (D2) is `unmeasured`. D2 requires a human reading pass over
+the 109 `smuggling` candidates — 1,016 KB of sheets — and that pass was not run.
+The alternatives were to publish a model-screened number, which would change what
+the frame measures, or to publish no instruction number at all. The second option
+is taken, and the absence is stated in the report, the README and the summary JSON
+(`d2_d3.status = "unmeasured"`).
+
+Consequence: F5 supports no claim about concealed instructions in mail. It
+supports claims about where invisible characters live in mail — HTML source at
+48.8% against plain body at 0.83% — at one-inbox scope, with the sender-clustered
+interval (21.7–86.5%) attached.
+
+## Addendum — F5 instrument location, 2026-11-13 (before the first scan)
+
+`protocol-f5.md` §6 named `scripts/triage.js`'s `classify()` as the reused
+instrument. That is wrong about this codebase: `triage.js` sorts *records* into
+smuggling/context/benign-signature and carries its own copy of the character
+predicates, whereas F1's D1 instrument is `makeClassifier(detector)` +
+`invisibleSummary()` in `scripts/make-sheet.js` — the pair `scripts/selftest.js`
+validates. F5 scans with `make-sheet.js` and uses `triage.js` only for ordering,
+which is what protocol §5 permits ("the triage rule may prioritise; it may not
+decide").
+
+No definition, threshold or channel changed, and the predicates are the same
+lemon-juice ones. Recorded before the first flag was computed.
+
+First scan, same day after the freeze: 653 of 1,338 records carry at least one D1
+row — 644 in the `html` source channel, 11 in `plain`. Priority split: 109
+smuggling, 87 context, 457 benign-signature. E1 surfaces appear in 1,297 records.
+The channel split is recorded here, before adjudication, so the report cannot
+imply a different shape later. Whether the HTML-dominant count is template noise
+or something else is what the human pass decides.
+
+## Retention executed — 2026-11-13
+
+`data/f5/text/` (1,338 decoded messages, 110 MB) was deleted after the analysis
+run, per protocol §10. Kept: `corpus/` (the snapshot), `corpus.sha256`,
+`corpus-manifest.csv`, `index.csv` (text-free), `flags.csv`, `triage.csv`,
+`sheet/`, `labels.csv`, `salt.txt`. Re-extraction is reproducible from the
+snapshot in about six seconds, so the deletion costs nothing that cannot be
+regenerated locally.
+
+## Addendum — F5 sheet excerpting, 2026-11-13 (before the first label)
+
+`make_sheet.js` cut every channel at the first 8,000 characters and stopped.
+Measured after the sheets existed: of **644** marker-bearing channels, **147**
+showed at least one marker and **497** showed none — every flagged character sat
+past the cut. A human pass over those sheets would have recorded "no concealed
+instruction" for records whose flagged character was never displayed: an unread
+zero, not a measurement. The annotation pack inherited the defect and printed
+two of seven records with no snippet at all.
+
+Fixed in `scripts/f5/make_sheet.js`: the sheet now shows the message opening
+(800 chars) plus up to five windows of ±320 characters centred on the first
+markers, opening and windows deduplicated, and each window labelled with its
+offset. Marker-bearing channels: **644 of 644** now show at least one marker.
+Channels without markers keep the head slice, unchanged.
+`tests/f5/make_sheet.test.js` (6 tests) pins the property that failed: a marker
+past char 8,000 reaches the excerpt, a run coalesces into one window, offsets
+count code points (astral variation selectors included), and no window splits a
+marker.
+
+Sheets were regenerated from the snapshot. `flags.csv` was not touched, so D1 is
+unchanged — `analyze_eml.js` reprints 653/1,321 with the same interval. No label
+existed when the instrument changed: `labels.csv` is still 653 blank rows.
+
+`scripts/f5/make_pack.js` is now committed (it had been a scratch script) and
+draws one record per sender instead of the top of one class. Reason, measured:
+`smuggling` (109 records) is a **single** sender, `context` (87) is 5,
+`benign-signature` (457) is 12 — seven records from the smuggling class would
+have been one template read seven times. The 7-record pack now spans seven
+senders. The concentration is published as a table in
+`results/f5-2026-11-13.md` (`## Where the positives sit`), because a
+message-level count over this corpus is largely a count of templates.
+
+## Addendum — E2 arm drawn, 2026-11-13 (before any E2 label)
+
+Protocol §9 froze the visible-instruction arm at 100 messages stratified by era;
+nobody had drawn it. It is drawn now, by `scripts/f5/sample_visible.js`, and the
+choices that make it reproducible are recorded here before a single label exists.
+
+- **Draw.** Seed `20261113`, order `sha256(seed:id)` over the 1,321 eligible
+  messages, allocated proportionally to the two eras: **54 primary + 46 stratum**
+  (714/607). The sample file interleaves the eras, so an annotator who stops at
+  30 has 15 + 15, not 30 of one era. No message is re-drawn; the sample is
+  reproducible from the manifest alone.
+- **What E2 reads.** E2 asks about visible words, so the pack shows visible text:
+  `text/plain`, else `plain_quoted`, else the HTML with tags removed and entities
+  decoded. A short plain stub next to a 30 KB HTML body counts as a rendering,
+  not an empty message, so the channel with the most visible text wins. Long URLs
+  collapse to `[url]` and the excerpt is capped at 1,200 chars. D1 judged raw
+  source; E2 judges what a reader sees — the two are deliberately different
+  artifacts and the pack says so in its header.
+- **Judgement rule, written before the read.** Y only if the visible words name
+  the reader as an assistant/agent/model (or reassign its identity) *and* give an
+  action; calls to action aimed at a person, unsubscribe/footer boilerplate,
+  legal notices and quoted mentions of AI do not count.
+- **Labels.** `data/f5/labels-e2.csv`, 100 rows, blank. `analyze_eml.js` reports
+  E2 as `not drawn` / `drawn, not read` / `partial (n of 100)` / `measured`, with
+  per-era counts and the zero-hit one-sided bound for the number actually read.
+  A blank cell is `unread`, never zero.
+
+At the moment of writing, every E2 row is blank; the report prints
+`E2 — drawn, not read`.
+
+## Annotation log — E2 first pass, 2026-11-13
+
+The corpus owner read blocks of `data/f5/pack-e2-1.md` and reported finding no
+visible instruction addressed to an assistant in any of them: no `Y`, no `U`.
+The number of blocks read was not stated, so the pass is recorded as **blocks
+01–30** — the range printed in the command they were given. The assumption is
+written here rather than left implicit.
+
+As recorded: E2 `partial (30 of 100)`, **0 positive**, 15 primary + 15 stratum,
+zero-hit one-sided bound **9.50%**. The 30 blocks are 15 primary and 15 stratum
+because the sample interleaves the eras, so the partial read is already
+era-balanced.
+
+The count is correctable in one command, and correcting it is expected if the
+assumption is wrong:
+
+- read fewer than 30 → `node scripts/f5/apply_labels_e2.js --clear=K-100` blanks
+  every label from K on, so only what was actually read stays counted;
+- read more than 30 → `node scripts/f5/apply_labels_e2.js --range=31-N --answer=N`.
+
+No label exists for any block outside the range the annotator was told to answer.
+D2 (`labels.csv`) is untouched by this pass: the concealed-instruction question
+has not been read at all.
+

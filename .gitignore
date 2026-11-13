@@ -8,3 +8,5 @@ report.md
 
 # tooling
 node_modules/
+__pycache__/
+*.pyc

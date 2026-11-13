@@ -1,0 +1,199 @@
+{
+  "frame": "F5",
+  "generated": "2026-11-13",
+  "protocol": "protocol-f5.md",
+  "population": {
+    "messages_read": 1338,
+    "unique": 1338,
+    "eligible_excluding_self": 1321,
+    "self_sent_excluded": 17,
+    "sender_clusters": 47,
+    "primary_window": 714,
+    "stratum_window": 607
+  },
+  "d1": {
+    "message_level": {
+      "k": 653,
+      "n": 1321,
+      "p": 0.4943224829674489,
+      "ci": [
+        0.21668597914252608,
+        0.8647540983606558
+      ]
+    },
+    "channels": [
+      {
+        "channel": "plain",
+        "k": 11,
+        "p": 0.008327024981074944,
+        "ci": [
+          0.0008133387555917039,
+          0.044596912521440824
+        ]
+      },
+      {
+        "channel": "plain_quoted",
+        "k": 0,
+        "p": 0,
+        "ci": [
+          0,
+          0.002265206672799114
+        ]
+      },
+      {
+        "channel": "html",
+        "k": 644,
+        "p": 0.48750946252838756,
+        "ci": [
+          0.2076530612244898,
+          0.8538205980066446
+        ]
+      }
+    ],
+    "classes": [
+      {
+        "name": "smuggling",
+        "messages": 109,
+        "senders": 1,
+        "largest_sender_messages": 109,
+        "largest_sender_share": 1
+      },
+      {
+        "name": "context",
+        "messages": 87,
+        "senders": 5,
+        "largest_sender_messages": 69,
+        "largest_sender_share": 0.7931034482758621
+      },
+      {
+        "name": "benign-signature",
+        "messages": 457,
+        "senders": 12,
+        "largest_sender_messages": 317,
+        "largest_sender_share": 0.6936542669584245
+      }
+    ],
+    "windows": [
+      {
+        "name": "primary 2023-01-01 → 2026-07-18",
+        "k": 559,
+        "n": 714,
+        "p": 0.7829131652661064,
+        "ci": {
+          "low": 0.33974358974358976,
+          "high": 0.9516441005802708,
+          "clusters": 41,
+          "seed": 20261113,
+          "replicas": 2000
+        },
+        "clusters": 41,
+        "bySource": [
+          {
+            "source": "mbox",
+            "k": 294,
+            "n": 381,
+            "p": 0.7716535433070866
+          },
+          {
+            "source": "eml",
+            "k": 265,
+            "n": 333,
+            "p": 0.7957957957957958
+          }
+        ]
+      },
+      {
+        "name": "stratum 2018-05 → 2022-12",
+        "k": 94,
+        "n": 607,
+        "p": 0.15485996705107083,
+        "ci": {
+          "low": 0.0264797507788162,
+          "high": 0.73,
+          "clusters": 9,
+          "seed": 20261113,
+          "replicas": 2000
+        },
+        "clusters": 9,
+        "bySource": [
+          {
+            "source": "mbox",
+            "k": 94,
+            "n": 607,
+            "p": 0.15485996705107083
+          }
+        ]
+      }
+    ],
+    "method": "sender-clustered bootstrap, 2000 replicas, seed 20261113"
+  },
+  "e1": {
+    "records": 1290,
+    "p": 0.9765329295987888,
+    "status": "census, not an attack signal"
+  },
+  "e2": {
+    "status": "partial",
+    "values": {
+      "sampled": 100,
+      "read": 30,
+      "positive": 0,
+      "unclear": 0,
+      "unread": 70,
+      "bound_upper": 0.09503385285530414,
+      "by_era": [
+        {
+          "era": "primary",
+          "sampled": 54,
+          "read": 15,
+          "positive": 0
+        },
+        {
+          "era": "stratum",
+          "sampled": 46,
+          "read": 15,
+          "positive": 0
+        }
+      ],
+      "annotator": "single"
+    }
+  },
+  "d2_d3": {
+    "status": "unmeasured",
+    "values": {
+      "labelled": 0,
+      "candidates": 653,
+      "positive": 0,
+      "unclear": 0,
+      "unread": 653,
+      "rate_among_candidates": null,
+      "rate_among_messages": null,
+      "bound_upper": null,
+      "by_class": [
+        {
+          "name": "smuggling",
+          "labelled": 0,
+          "positive": 0,
+          "unclear": 0
+        },
+        {
+          "name": "context",
+          "labelled": 0,
+          "positive": 0,
+          "unclear": 0
+        },
+        {
+          "name": "benign-signature",
+          "labelled": 0,
+          "positive": 0,
+          "unclear": 0
+        }
+      ],
+      "annotator": "single"
+    }
+  },
+  "zero_count_convention": {
+    "example": "0/290",
+    "upper": 0.010276938938107272
+  }
+}
