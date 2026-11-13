@@ -18,6 +18,10 @@ Per protocol §9: the earlier 300-record single-file run is discarded.
 | Verdict `clean` | 93 (32.1%) |
 | Verdict `noise` | 197 (67.9%) |
 
+> Interval note: this snapshot used the 3.84/n approximation (`0.0–1.3%`). The final
+> report uses one-sided exact Clopper–Pearson throughout: `0/290 → 1.0%`. See
+> `../deviations.md` item 13.
+
 What the 34 D1 records actually contain:
 
 | Mechanism | Records | Benign explanation |

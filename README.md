@@ -10,6 +10,24 @@ built to flag concealed prompt injection, and nobody had checked whether the
 threat it targeted was common enough to justify the tool. It wasn't — see
 [the result](#result) and the postmortem linked from that repository.
 
+## In one screen
+
+**Answer.** In 290 crawled documents, 34 (11.7%) carried an invisible code point.
+None of the 3 read end to end carried an instruction; the other 31 matched a benign
+mechanism signature (BOM at offset 0, zero-width inside a CJK run, VS16 after an
+emoji, word joiner, filler), which is a screen, not a reading. The detector fired
+on 0 of 290. Concealment is a property of the web; it is not a signal of an attack.
+
+**Scope.** This is not a base rate for prompt injection. The instrument opens
+only documents that contain an invisible character (256 of 290 were never
+examined), and it cannot see a visible instruction, base64, emoji encoding,
+comments, attributes or CSS. F4 covers the markup surfaces, but only on 553 job
+postings, and it is exploratory.
+
+**Evidence tiers.** F1 is pre-registered (`protocol.md`); the sensitivity control
+is a post-hoc addition (`results/sensitivity-report.md`); F4 is exploratory
+(`deviations.md`).
+
 ## Result
 
 F1 frame — 290 plain-text extractions from Common Crawl (`CC-MAIN-2026-25`,
@@ -18,14 +36,26 @@ F1 frame — 290 plain-text extractions from Common Crawl (`CC-MAIN-2026-25`,
 | Quantity | Value |
 | --- | --- |
 | Records with ≥1 invisible code point (D1) | **34 / 290 = 11.7%** (95% CI 8.5–15.9%) |
-| Detector flagged at `suspicious` or worse | **0 / 290** (95% CI 0.0–1.3%) |
+| Candidates read end to end | 3 / 34 |
+| — of which D2 | **0 / 3** (one-sided 95% UB 63.2%) |
+| Candidates screened by a benign mechanism signature | 31 / 34 |
+| **D2 — concealed instruction, all 34 candidates** | **0 / 34** (one-sided 95% UB 8.4%) |
+| Detector flagged at `suspicious` or worse | **0 / 290** (95% CI 0.0–1.0%) |
 | Detector verdicts | 93 clean, 197 `noise` |
 | Dominant finding type | `mixed-script` (191 of 290 records) |
 
-The 34 D1 records are almost entirely benign mechanisms: 17 BOMs, 9 zero-width
-spaces used for CJK line-breaking, 6 emoji variation selectors, 1 word joiner,
-and one Hangul filler. No Tags-block payloads, no smuggling channels, no bidi
-overrides.
+Intervals for zero counts are one-sided exact Clopper–Pearson throughout, the
+convention already used by F4: `0/290 → 1.0%`, `0/34 → 8.4%`, `0/3 → 63.2%`
+(rule-of-three cross-checks: 1.0% and 8.8%; at 0/3 it is 100% and carries no
+information). The detector-flag row records what the tool did on the sample; it is
+not a prevalence of instructions. The denominator for an instruction rate is the
+34 documents where concealment could exist, not the 290 — and `0/34` treats the 31
+signature-screened candidates as negative. Only 3 of the 34 were read closely; see
+[`results/d2-report.md`](results/d2-report.md).
+
+The 34 D1 records by dominant mechanism: 17 BOM, 9 zero-width space, 6 emoji
+variation selector, 1 word joiner, one Hangul filler. No Tags-block payloads, no
+smuggling channels, no bidi overrides.
 
 **Concealment is a property of the web, not a signal of an attack.** A detector
 keyed on it has no operating point on real traffic: it is either silent or it is
@@ -55,18 +85,26 @@ of the self-audit against the ACL-ARR responsible-research checklist, and
 [`NEXT-STUDY.md`](NEXT-STUDY.md) for the frame that would actually decide the
 question.
 
-D2 (a concealed *instruction*) is measured by human adjudication of the 34
-candidates against a definition frozen before data collection; see `protocol.md`
-§3–4 and `results/`. The pre-registered decision rule (§6) is applied by
-`scripts/analyze.js`.
+D2 (a concealed *instruction*) is a human judgement against a definition frozen
+before data collection (`protocol.md` §3–4). It was applied to the 3 candidates
+that matched no benign mechanism signature, and all 3 were negative. The other 31
+matched a signature that explains every invisible character (BOM at offset 0,
+zero-width inside a CJK run, VS16 after an emoji, word joiner, or one filler) and
+were screened by that signature rather than read. D2 = 0/34 is therefore
+conditional on the screen, and 0/3 read closely has a one-sided 95% upper bound of
+63.2% — the null is a statement about the channel, not a precise rate. Coverage and
+the labelling gaps are in [`results/d2-report.md`](results/d2-report.md); the
+pre-registered decision rule (§6) is applied by `scripts/analyze.js`.
 
-### F4 frame — rendered markup, 553 job postings (2026-11-10)
+### F4 frame — rendered markup, 553 job postings (2026-11-10, exploratory)
 
 F1 is plain text and cannot see CSS, comments or attributes. F4 renders the page
 in headless Chromium and reads computed style, so it measures the surface the
-archived extension was built for. Result
-([`results/render-2026-11-10.md`](results/render-2026-11-10.md), **not
-pre-registered** — see `deviations.md`):
+archived extension was built for. It is **exploratory, not pre-registered** —
+designed, run and written up in one pass on 553 postings from 14 employers and
+three ATS families, i.e. content an agent screens, not a sample of the web. Result
+([`results/render-2026-11-10.md`](results/render-2026-11-10.md); deviations in
+[`deviations.md`](deviations.md#run-log--f4-sample-2026-11-10-not-pre-registered)):
 
 | Channel | Docs | Prevalence (95% CI) | Instruction-shaped |
 | --- | ---: | --- | ---: |
@@ -76,8 +114,10 @@ pre-registered** — see `deviations.md`):
 | Attributes ≥40 alphanumerics | 194/553 | 35.1% (31.2–39.1%) | 0 |
 | JSON-LD / meta description | 316 · 278/553 | 57.1% · 50.3% | 5 (all false positives) |
 
-Concealment is five times more common on rendered markup than in extracted text
-(58.8% vs 11.7%) and still carries no instruction: 5,728 concealed elements reduce
+Concealment is far more common on rendered markup than in extracted text (58.8% vs
+11.7%), but the two are not like-for-like: different populations (job postings vs a
+crawl), different units (pages vs WET records) and different channels (CSS state vs
+invisible Unicode). Neither carries an instruction: 5,728 concealed elements reduce
 to 149 distinct strings, median 25 characters, longest 49, none instruction-shaped.
 The instruction count is zero at both frames, so the mechanism, not the rate, is
 what F1 got wrong.
@@ -95,10 +135,15 @@ gated on instruction shape, 3.2% on a 90.5%-data-injection mix.
 
 Common Crawl WET is plain-text extraction of real pages — approximately what a
 text-extraction agent pipeline ingests. Records are sampled deterministically
-(seeded crawl draw, 30 files, ≤10 records each, ≥200 characters), classified
-mechanically for invisible code points, and then adjudicated by a human against
-a definition fixed before any data was collected. The protocol is frozen;
-pre-data changes are logged in `deviations.md`.
+(seeded crawl draw, 30 files, ≤10 records each, ≥200 characters) and classified
+mechanically for invisible code points, which leaves 34 candidates. Those were
+triaged: 31 match a benign mechanism signature (BOM at offset 0, zero-width inside
+a CJK run, VS16 after an emoji, word joiner, one filler) that accounts for every
+invisible character in them, and the 3 that match none were read end to end against
+a definition fixed before data was collected. One annotator (the author); the
+planned 30-record D1 audit and the 10% re-label were not executed — recorded in
+[`deviations.md`](deviations.md) and [`results/d2-report.md`](results/d2-report.md).
+The protocol is frozen; pre-data changes are logged in `deviations.md`.
 
 ## Reproduce
 
@@ -109,7 +154,7 @@ node scripts/make-sheet.js                        # sheets + flags + candidates
 node scripts/summarize.js                         # descriptive numbers (no labels)
 node scripts/triage.js                            # sort candidates by human-review need
 # annotate labels.csv: the triaged candidates + a 30-record audit
-node scripts/analyze.js                           # pre-registered K1/K2/K3 verdict
+node scripts/analyze.js                           # K3 verdict; fails closed while candidates are unlabelled
 ```
 
 F4 frame (Python + Playwright; renders the page, so run it in the VM per
@@ -155,12 +200,43 @@ instruction, or one encoded in base64 or emoji, is invisible to this instrument
 by construction. D2 = 0 means "the concealment channel was empty in the documents
 that had one" — not "no instructions were found on the web".
 
+## How this was made
+
+**AI assistance.** Most of the implementation and most first drafts of the prose
+were produced with an AI assistant; the disclosure is in
+[`RESPONSIBLE-RESEARCH.md`](RESPONSIBLE-RESEARCH.md) section E1, in the author's
+words. The author set the questions, made the scoping calls and owns every claim;
+numbers were recomputed from the local data before publication, and the drafts were
+not treated as evidence. The prose style is a consequence of that process; it is not
+evidence either way about the numbers.
+
+**Annotation.** One annotator, the author, unpaid; no second opinion and no
+inter-annotator agreement. Protocol §4's 30-record D1 audit and 10% same-annotator
+re-label were not executed. Both gaps are in `deviations.md` and
+`RESPONSIBLE-RESEARCH.md` section D6, and they bound what D2 = 0 can mean.
+
+## How to cite
+
+F1 (pre-registered): "34 of 290 Common Crawl records contained an invisible code
+point (11.7%); the concealment channel carried no instruction in the 34 documents
+where it could exist (3 read closely, 31 screened by a benign mechanism signature;
+0/3, one-sided 95% upper bound 63.2%)." Do not shorten it to "no prompt injection
+in 290 pages".
+
+F4 (exploratory): "553 job postings from 14 employers across three ATS families;
+0 concealed instructions found; the ≤2.9% figure is a sensitivity-adjusted upper
+bound, not a prevalence estimate." It must not be cited as a web-wide rate.
+
+`CITATION.cff` carries the same caveat in repository metadata.
+
 ## Layout
 
 | Path | Purpose |
 | --- | --- |
 | `protocol.md` | frozen pre-registered design, definitions, kill criterion |
-| `results/` | descriptive numbers, the narrative report, and the D2 report template |
+| `results/` | descriptive numbers, the narrative reports, and D2 coverage |
+| `results/d2-report.md` | D2 coverage: what was read, what was signature-screened, what was not labelled |
+| `CITATION.cff` | citation metadata, including the exploratory-F4 caveat |
 | `RESPONSIBLE-RESEARCH.md` | self-audit against the ACL-ARR responsible-research checklist |
 | `NEXT-STUDY.md` | design sketch for the frame that would decide the question (agent-fetched content, markup surfaces) |
 | `deviations.md` | pre-data changes and run log |
