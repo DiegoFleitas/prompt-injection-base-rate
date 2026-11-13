@@ -209,7 +209,7 @@ function main() {
     const channel = candidate.block ? candidate.block.channel : "no markers";
     out.push(
       `## ${letters[index]} — \`${candidate.id}\` (${candidate.month}, ${candidate.priority}, ` +
-        `${channel}, ${total} markers)`
+        `${channel}, ${total} marker${total === 1 ? "" : "s"})`
     );
     out.push("");
     if (!candidate.block) return;
