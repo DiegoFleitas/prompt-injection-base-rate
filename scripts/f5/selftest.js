@@ -16,6 +16,7 @@
 
 const assert = require("assert/strict");
 const { scanRecord } = require("./scan_eml.js");
+const { cpUpper } = require("./analyze_eml.js");
 
 // 1. Ordinary text must produce zero rows.
 const clean = scanRecord({
@@ -58,5 +59,10 @@ for (const row of [...zwsp, ...tags, ...hidden, ...quoted]) {
   assert.deepEqual(Object.keys(row).sort(),
     ["channel", "class", "count", "mechanism", "priority"]);
 }
+
+// 7. The zero-count convention must match the one the protocol asserts.
+assert.ok(Math.abs(cpUpper(0, 290) - 0.01027) < 0.0005,
+  `0/290 one-sided bound drifted: ${cpUpper(0, 290)}`);
+assert.ok(cpUpper(0, 1321) < 0.003, "zero bound must shrink with n");
 
 console.log("selftest: all assertions passed");
