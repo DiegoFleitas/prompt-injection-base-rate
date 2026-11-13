@@ -134,7 +134,37 @@
   },
   "d2_d3": {
     "status": "unmeasured",
-    "values": null
+    "values": {
+      "labelled": 0,
+      "candidates": 653,
+      "positive": 0,
+      "unclear": 0,
+      "unread": 653,
+      "rate_among_candidates": null,
+      "rate_among_messages": null,
+      "bound_upper": null,
+      "by_class": [
+        {
+          "name": "smuggling",
+          "labelled": 0,
+          "positive": 0,
+          "unclear": 0
+        },
+        {
+          "name": "context",
+          "labelled": 0,
+          "positive": 0,
+          "unclear": 0
+        },
+        {
+          "name": "benign-signature",
+          "labelled": 0,
+          "positive": 0,
+          "unclear": 0
+        }
+      ],
+      "annotator": "single"
+    }
   },
   "zero_count_convention": {
     "example": "0/290",

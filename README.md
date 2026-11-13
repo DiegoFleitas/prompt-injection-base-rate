@@ -238,6 +238,13 @@ The manifest verifies with `cd data/f5/corpus && sha256sum -c ../corpus.sha256`
 `results/f5-2026-11-13.summary.json` byte for byte (2,000-replica bootstrap, seed
 `20261113`).
 
+`analyze_eml.js` reads `data/f5/labels.csv` (`--labels=`, default path). With no
+`0`/`1` in the D2 column the report prints `unmeasured`; with some it prints
+`partial (n of 653)` and the zero-hit bound for that n, and the frame stays
+`unmeasured` because §8's two denominators are not complete. Only a human writes
+that file: the script never guesses a label, and a blank cell is never read as
+zero.
+
 `triage.js` is a prioritisation aid, not a label: it writes no verdicts and the
 sheets are still the thing to read. On the 2026-10-26 sample it flagged 3 of the
 34 candidates for close reading and 0 smuggling-channel candidates — which is

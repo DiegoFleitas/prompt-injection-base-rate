@@ -29,6 +29,7 @@ function parseArgs(argv) {
   const args = {
     manifest: "data/f5/corpus-manifest.csv",
     flags: "data/f5/flags.csv",
+    labels: "data/f5/labels.csv",
     out: "results/f5-2026-11-13.md",
     json: "results/f5-2026-11-13.summary.json",
   };
@@ -224,6 +225,96 @@ function main() {
   });
 
   const e1Count = count(eligible, e1);
+
+  // D2/D3 come from labels.csv, which only a human fills (protocol §5: no LLM
+  // pre-labelling). A file with no `0`/`1` in the D2 column is `unmeasured`,
+  // not zero; a file with some is `partial`, and the frame stays unmeasured
+  // until every D1 candidate is read.
+  const d1Ids = new Set(d1);
+  const labels = readCsv(args.labels);
+  const labelled = labels.filter(
+    (row) => d1Ids.has(row.id) && (row.d2_concealed_instruction === "0" || row.d2_concealed_instruction === "1")
+  );
+  const positives = labelled.filter((row) => row.d2_concealed_instruction === "1");
+  const unclear = labels.filter(
+    (row) =>
+      d1Ids.has(row.id) &&
+      (row.d2_concealed_instruction || "").trim() === "" &&
+      (row.notes || "").trim().length > 0
+  );
+  const d2ByClass = classes.map((entry) => {
+    const rows = labels.filter((row) => d1Ids.has(row.id) && priority.get(row.id) === entry.name);
+    const done = rows.filter(
+      (row) => row.d2_concealed_instruction === "0" || row.d2_concealed_instruction === "1"
+    );
+    return {
+      name: entry.name,
+      labelled: done.length,
+      positive: done.filter((row) => row.d2_concealed_instruction === "1").length,
+      unclear: rows.filter(
+        (row) => (row.d2_concealed_instruction || "").trim() === "" && (row.notes || "").trim().length > 0
+      ).length,
+    };
+  });
+  const d2Status = labelled.length === 0 ? "unmeasured" : labelled.length < d1.size ? "partial" : "measured";
+  const d2Values = {
+    labelled: labelled.length,
+    candidates: d1.size,
+    positive: positives.length,
+    unclear: unclear.length,
+    unread: d1.size - labelled.length - unclear.length,
+    rate_among_candidates: labelled.length ? positives.length / labelled.length : null,
+    rate_among_messages: labelled.length ? positives.length / eligible.length : null,
+    bound_upper: positives.length === 0 && labelled.length ? cpUpper(0, labelled.length) : null,
+    by_class: d2ByClass,
+    annotator: "single",
+  };
+  const d2Table = () => {
+    const rows = d2ByClass.filter((row) => row.labelled + row.unclear > 0);
+    if (!rows.length) return [];
+    return [
+      "| Class | Read | Positive | Unclear |",
+      "| --- | ---: | ---: | ---: |",
+      ...rows.map((row) => `| ${row.name} | ${row.labelled} | ${row.positive} | ${row.unclear} |`),
+      "",
+    ];
+  };
+
+  const d2Section =
+    d2Status === "unmeasured"
+      ? [
+          "## D2 / D3 — unmeasured",
+          "",
+          "Not computed, and not zero. The protocol requires a human to read the sheets;",
+          "the machine half of D1 is not a label. This report publishes the mechanism",
+          "counts and states plainly that the instruction rate was not measured, rather",
+          "than letting a zero stand for a reading nobody did. `labels.csv` is the empty",
+          "artifact where that pass would land.",
+        ]
+      : [
+          `## D2 / D3 — ${d2Status === "partial" ? `partial (${d2Values.labelled} of ${d2Values.candidates} candidates read)` : "concealed instruction"}`,
+          "",
+          `Of ${d2Values.candidates} D1 candidates, **${d2Values.labelled}** were read: ` +
+            `**${d2Values.positive}** carried a concealed instruction, ` +
+            `${d2Values.unclear} were unclear, ${d2Values.unread} are unread.` +
+            (d2Values.bound_upper === null
+              ? ` That is ${pct(d2Values.rate_among_candidates)} of the candidates read.`
+              : ` A zero-hit one-sided 95% bound over those ${d2Values.labelled} is **${pct(d2Values.bound_upper)}**.`),
+          "",
+          ...d2Table(),
+          ...(d2Status === "partial"
+            ? [
+                "A convenience subsample, not the pre-registered arm: protocol §8 asks for",
+                "D2 among D1 candidates and among all messages, and neither denominator is",
+                "complete. The frame's D2 therefore stays `unmeasured`; reading is human-only",
+                "(§5), so no partial value stands in for the frame result.",
+              ]
+            : [
+                `Among all ${eligible.length.toLocaleString("en-US")} eligible messages the same`,
+                `positives are ${pct(d2Values.rate_among_messages)}. Single annotator, no model`,
+                "pre-labelling.",
+              ]),
+        ];
   const zeroCheck = cpUpper(0, 290);
   if (Math.abs(zeroCheck - 0.01027) > 0.0005) {
     throw new Error(`zero-count bound drift: 0/290 → ${zeroCheck}`);
@@ -250,7 +341,7 @@ function main() {
       method: `sender-clustered bootstrap, ${REPLICAS} replicas, seed ${SEED}`,
     },
     e1: { records: e1Count, p: e1Count / eligible.length, status: "census, not an attack signal" },
-    d2_d3: { status: "unmeasured", values: null },
+    d2_d3: { status: d2Status, values: d2Values },
     zero_count_convention: { example: "0/290", upper: zeroCheck },
   };
 
@@ -333,13 +424,7 @@ function main() {
     "alt text, HTML comments and `display:none` are ordinary template furniture, and",
     "F1/F4 both found that ubiquity is not signal.",
     "",
-    "## D2 / D3 — unmeasured",
-    "",
-    "Not computed, and not zero. The protocol requires a human to read the sheets;",
-    "the machine half of D1 is not a label. This report publishes the mechanism",
-    "counts and states plainly that the instruction rate was not measured, rather",
-    "than letting a zero stand for a reading nobody did. `labels.csv` is the empty",
-    "artifact where that pass would land.",
+    ...d2Section,
     "",
     "## Method and limits",
     "",
@@ -362,6 +447,7 @@ function main() {
   console.log(`primary window   : ${pct(windows[0].p)} (${windows[0].k}/${windows[0].n})`);
   console.log(`stratum          : ${pct(windows[1].p)} (${windows[1].k}/${windows[1].n})`);
   console.log(`E1 records       : ${e1Count}/${overall.n}`);
+  console.log(`D2 labelled      : ${d2Values.labelled}/${d2Values.candidates} (${d2Values.positive} positive, ${d2Values.unclear} unclear)`);
   console.log(`written          : ${args.out}`);
   console.log(`json             : ${args.json}`);
 }
