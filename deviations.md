@@ -256,3 +256,36 @@ run, per protocol §10. Kept: `corpus/` (the snapshot), `corpus.sha256`,
 snapshot in about six seconds, so the deletion costs nothing that cannot be
 regenerated locally.
 
+## Addendum — F5 sheet excerpting, 2026-11-13 (before the first label)
+
+`make_sheet.js` cut every channel at the first 8,000 characters and stopped.
+Measured after the sheets existed: of **644** marker-bearing channels, **147**
+showed at least one marker and **497** showed none — every flagged character sat
+past the cut. A human pass over those sheets would have recorded "no concealed
+instruction" for records whose flagged character was never displayed: an unread
+zero, not a measurement. The annotation pack inherited the defect and printed
+two of seven records with no snippet at all.
+
+Fixed in `scripts/f5/make_sheet.js`: the sheet now shows the message opening
+(800 chars) plus up to five windows of ±320 characters centred on the first
+markers, opening and windows deduplicated, and each window labelled with its
+offset. Marker-bearing channels: **644 of 644** now show at least one marker.
+Channels without markers keep the head slice, unchanged.
+`tests/f5/make_sheet.test.js` (6 tests) pins the property that failed: a marker
+past char 8,000 reaches the excerpt, a run coalesces into one window, offsets
+count code points (astral variation selectors included), and no window splits a
+marker.
+
+Sheets were regenerated from the snapshot. `flags.csv` was not touched, so D1 is
+unchanged — `analyze_eml.js` reprints 653/1,321 with the same interval. No label
+existed when the instrument changed: `labels.csv` is still 653 blank rows.
+
+`scripts/f5/make_pack.js` is now committed (it had been a scratch script) and
+draws one record per sender instead of the top of one class. Reason, measured:
+`smuggling` (109 records) is a **single** sender, `context` (87) is 5,
+`benign-signature` (457) is 12 — seven records from the smuggling class would
+have been one template read seven times. The 7-record pack now spans seven
+senders. The concentration is published as a table in
+`results/f5-2026-11-13.md` (`## Where the positives sit`), because a
+message-level count over this corpus is largely a count of templates.
+

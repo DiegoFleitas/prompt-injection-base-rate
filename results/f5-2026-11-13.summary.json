@@ -50,6 +50,29 @@
         ]
       }
     ],
+    "classes": [
+      {
+        "name": "smuggling",
+        "messages": 109,
+        "senders": 1,
+        "largest_sender_messages": 109,
+        "largest_sender_share": 1
+      },
+      {
+        "name": "context",
+        "messages": 87,
+        "senders": 5,
+        "largest_sender_messages": 69,
+        "largest_sender_share": 0.7931034482758621
+      },
+      {
+        "name": "benign-signature",
+        "messages": 457,
+        "senders": 12,
+        "largest_sender_messages": 317,
+        "largest_sender_share": 0.6936542669584245
+      }
+    ],
     "windows": [
       {
         "name": "primary 2023-01-01 → 2026-07-18",

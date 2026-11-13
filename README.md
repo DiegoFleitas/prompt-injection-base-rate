@@ -163,10 +163,19 @@ interval says so. The era gap holds inside both sources (77.2% vs 15.5% in the
 mbox alone) but spans 41 sender clusters against 9, so it is reported as a
 stratification, not a trend.
 
+The positives are a template property, not a message property: the `smuggling`
+class (109 records) is a **single** sender, `context` (87) is 5 senders, and
+`benign-signature` (457) is 12, one of which owns 317. The report publishes that
+table (`## Where the positives sit`) so the headline rate cannot be read as a
+statement about mail in general, and so the annotation pass is priced per sender
+rather than per message.
+
 D2 was not adjudicated. The protocol requires a human reading pass over the 109
 `smuggling` candidates, and that pass was not run. The report says `unmeasured`
 rather than 0, because those are different claims: one is a bound, the other is a
-reading nobody did.
+reading nobody did. The pack for that pass (`data/f5/pack-10min.md`, local-only)
+is cut from the triage sheets and shows one record per sender with the flagged
+characters in context.
 
 ## Method in one paragraph
 
@@ -212,11 +221,13 @@ python scripts/f5/manifest.py --root=data/f5/corpus --out=data/f5/corpus-manifes
   --salt=data/f5/salt.txt --self=data/f5/self-addresses.txt --corpus-sha256=data/f5/corpus.sha256
 python scripts/f5/extract_eml.py --root=data/f5/corpus --out=data/f5/text \
   --index=data/f5/index.csv --salt=data/f5/salt.txt --self=data/f5/self-addresses.txt
-python -m unittest discover -s tests/f5 -t . -v     # 6 tests
+python -m unittest discover -s tests/f5 -t . -v     # 6 python tests
+node --test tests/f5/make_sheet.test.js               # 6 sheet-excerpt tests
 node scripts/f5/selftest.js                          # wiring + interval maths
 node scripts/f5/scan_eml.js --text=data/f5/text --out=data/f5/flags.csv
 node scripts/f5/make_sheet.js --text=data/f5/text --flags=data/f5/flags.csv \
   --out=data/f5/sheet --csv=data/f5/triage.csv --labels=data/f5/labels.csv
+node scripts/f5/make_pack.js --n=7                    # data/f5/pack-10min.md
 node scripts/f5/analyze_eml.js --manifest=data/f5/corpus-manifest.csv \
   --flags=data/f5/flags.csv --out=results/f5-2026-11-13.md \
   --json=results/f5-2026-11-13.summary.json

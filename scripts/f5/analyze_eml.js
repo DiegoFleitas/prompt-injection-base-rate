@@ -150,6 +150,33 @@ function main() {
     }
   }
 
+  // Priority class per message, by the same rule make_sheet.js uses: the
+  // hardest class any of its rows carries. Sender names are salted hashes.
+  const RANK = { smuggling: 0, context: 1, "benign-signature": 2 };
+  const priority = new Map();
+  for (const row of flags) {
+    if (row.class !== "D1") continue;
+    const current = priority.get(row.id);
+    if (current === undefined || RANK[row.priority] < RANK[current]) priority.set(row.id, row.priority);
+  }
+  const senderOf = new Map(manifest.map((row) => [row.id, row.from_hash || "unknown"]));
+  const classes = ["smuggling", "context", "benign-signature"].map((name) => {
+    const ids = [...priority.entries()].filter(([, value]) => value === name).map(([id]) => id);
+    const counts = new Map();
+    for (const id of ids) {
+      const sender = senderOf.get(id);
+      counts.set(sender, (counts.get(sender) || 0) + 1);
+    }
+    const largest = Math.max(0, ...counts.values());
+    return {
+      name,
+      messages: ids.length,
+      senders: counts.size,
+      largest_sender_messages: largest,
+      largest_sender_share: ids.length ? largest / ids.length : 0,
+    };
+  });
+
   const eligible = manifest.filter((row) => row.self === "0");
   const primary = eligible.filter(
     (row) => row.date_month >= PRIMARY_FROM.slice(0, 7) && row.date_month <= PRIMARY_TO.slice(0, 7)
@@ -218,6 +245,7 @@ function main() {
     d1: {
       message_level: { k: overall.k, n: overall.n, p: overall.p, ci: [overall.ci.low, overall.ci.high] },
       channels: channelRows.map((row) => ({ channel: row.channel, k: row.k, p: row.p, ci: [row.ci.low, row.ci.high] })),
+      classes,
       windows,
       method: `sender-clustered bootstrap, ${REPLICAS} replicas, seed ${SEED}`,
     },
@@ -275,6 +303,25 @@ function main() {
     "The 2018–2022 stratum is 9 sender clusters against 41 in the primary window,",
     "so the gap mixes era and sender mix and is reported as a stratification, not",
     "as a trend.",
+    "",
+    "## Where the positives sit",
+    "",
+    "Classes come from the triage rule (mechanism signature and marker density),",
+    "not from a label. The sender column is the point:",
+    "",
+    "| Class | Messages | Senders | Largest sender |",
+    "| --- | ---: | ---: | ---: |",
+    ...classes.map(
+      (row) =>
+        `| ${row.name} | ${row.messages} | ${row.senders} | ${row.largest_sender_messages} (${pct(
+          row.largest_sender_share
+        )}) |`
+    ),
+    "",
+    `One address owns every \`smuggling\` record; the largest \`benign-signature\` address`,
+    `owns ${classes[2].largest_sender_messages} of ${classes[2].messages}. A message-level count is therefore closer to a`,
+    "count of templates than of messages, which is why the clustered interval is as",
+    "wide as it is and why a human pass prices hours per sender, not per message.",
     "",
     "An invisible code point is not an instruction. These are mechanism counts that",
     "make the adjudication denominator visible; D2 decides what, if anything,",
