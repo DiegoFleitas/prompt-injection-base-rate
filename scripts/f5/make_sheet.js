@@ -24,6 +24,9 @@ const detector = require(path.join(__dirname, "..", "..", "..", "lemon-juice", "
 const classifier = makeClassifier(detector);
 const RANK = { smuggling: 0, context: 1, "benign-signature": 2 };
 const MAX_CHARS = 8000;
+const HEAD_CHARS = 800;
+const CONTEXT_CHARS = 320;
+const MAX_WINDOWS = 5;
 const CHANNEL_ORDER = ["plain", "plain_quoted", "html"];
 
 function parseArgs(argv) {
@@ -48,6 +51,74 @@ function readFlags(file) {
     const cells = line.split(",");
     return Object.fromEntries(header.map((key, index) => [key, cells[index]]));
   });
+}
+
+/**
+ * Code-point offsets of the invisible characters, so a window can be cut
+ * around each one. Iterates code points (variation selectors in the E0100
+ * plane are surrogate pairs) and advances by the UTF-16 width.
+ */
+function markerPositions(text, classifier) {
+  const positions = [];
+  let index = 0;
+  for (const ch of text) {
+    if (classifier.classify(ch)) positions.push(index);
+    index += ch.length;
+  }
+  return positions;
+}
+
+/**
+ * Excerpt that actually shows the markers.
+ *
+ * A head-only slice hides them: 497 of 644 marker-bearing channels carried
+ * every marker past char 8000, so the annotator read boilerplate CSS and never
+ * saw the character the scanner flagged. The excerpt is the message opening
+ * plus up to five windows centred on markers, with byte offsets instead of
+ * filler. A channel with no markers keeps the plain head slice.
+ */
+function excerpt(text, classifier, summary) {
+  if (!summary.total) {
+    const shown = text.slice(0, MAX_CHARS);
+    return {
+      shown,
+      note: text.length > MAX_CHARS ? `\n[truncated at ${MAX_CHARS} chars]` : "",
+    };
+  }
+
+  const windows = [];
+  const headEnd = Math.min(HEAD_CHARS, text.length);
+  for (const pos of markerPositions(text, classifier)) {
+    const end = Math.min(text.length, pos + CONTEXT_CHARS);
+    // markers already inside the opening are not repeated in a window
+    if (end <= headEnd) continue;
+    const start = Math.max(headEnd, pos - CONTEXT_CHARS);
+    const last = windows[windows.length - 1];
+    if (last && start <= last.end) {
+      last.end = Math.max(last.end, end);
+      continue;
+    }
+    if (windows.length >= MAX_WINDOWS) break;
+    windows.push({ start, end });
+  }
+
+  // never cut a surrogate pair in half at the head boundary
+  let head = text.slice(0, headEnd);
+  if (head.length && head.charCodeAt(head.length - 1) >= 0xd800 && head.charCodeAt(head.length - 1) <= 0xdbff) {
+    head = head.slice(0, -1);
+  }
+  const parts = [visualize(head, classifier)];
+  let used = head.length;
+  for (const window of windows) {
+    const size = window.end - window.start;
+    if (used + size > MAX_CHARS) break;
+    parts.push(`[…${window.start}…]\n${visualize(text.slice(window.start, window.end), classifier)}`);
+    used += size;
+  }
+  const note = windows.length
+    ? `\n[excerpted ${used} of ${text.length} chars, ${windows.length} marker window(s)]`
+    : `\n[excerpted ${used} of ${text.length} chars, every marker inside the opening]`;
+  return { shown: parts.join("\n\n"), note };
 }
 
 function main() {
@@ -81,11 +152,11 @@ function main() {
       const text = record[channel] || "";
       if (!text) continue;
       const summary = invisibleSummary(text, classifier);
-      const shown = text.slice(0, MAX_CHARS);
+      const { shown, note } = excerpt(text, classifier, summary);
       blocks.push(
         `---- ${channel} (${text.length} chars, ${summary.total} invisible) ----\n` +
-        visualize(shown, classifier) +
-        (text.length > MAX_CHARS ? `\n[truncated at ${MAX_CHARS} chars]` : "")
+          shown +
+          note
       );
     }
 
@@ -139,6 +210,8 @@ function main() {
   console.log(`labels template : ${args.labels}`);
 }
 
-if (typeof module !== "undefined" && module.exports) module.exports = { main };
+if (typeof module !== "undefined" && module.exports) {
+  module.exports = { main, excerpt, markerPositions };
+}
 
 if (require.main === module) main();
