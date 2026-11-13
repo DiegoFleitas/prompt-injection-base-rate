@@ -168,9 +168,12 @@ limitation on the D2 judgement.
 documents, **3 were read closely and labelled benign** (`labels.csv`), and **31
 matched a mechanical benign signature** (BOM at offset 0, variation selector after
 an emoji, zero-width inside CJK text). The 31 were screened, not read end to end.
-This is why the public sentence says "none of them used concealment to carry an
-instruction" rather than "no instructions were detected": one claim is about the
-channel in documents that had one, the other would be about the whole sample.
+Two further items planned in `protocol.md` §4 were **not executed**: the 30-record
+audit of non-candidates for D1 misses, and the 10% same-annotator re-label for
+self-consistency. Both gaps are recorded in `deviations.md` item 12. This is why
+the public sentence says "none of them used concealment to carry an instruction"
+rather than "no instructions were detected": one claim is about the channel in
+documents that had one, the other would be about the whole sample.
 
 ## E. AI assistants
 
@@ -223,7 +226,8 @@ operating characteristic.
 
 1. **D2 is scoped, not measured across the frame.** 3 of 34 flagged documents were
    read closely, 31 screened mechanically, and 256 of 290 documents were never in
-   scope for D2 at all.
+   scope for D2 at all. The 30-row D1 audit and the 10% re-label planned in §4 were
+   not executed (`deviations.md` item 12).
 2. **Visible-instruction prevalence is unmeasured.** A separate study with a
    different instrument (human reading or a classifier validated against human
    labels) is required; the sensitivity control proves this one cannot see it.
