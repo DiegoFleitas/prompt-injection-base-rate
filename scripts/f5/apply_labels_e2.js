@@ -30,6 +30,8 @@ function parseArgs(argv) {
     pack: "data/f5/pack-e2-1.md",
     labels: "data/f5/labels-e2.csv",
     answers: "",
+    range: "",
+    answer: "",
   };
   for (const arg of argv) {
     const match = /^--([a-z-]+)=(.*)$/.exec(arg);
@@ -103,10 +105,26 @@ function ensureLabels(file, sample) {
 function main() {
   const args = parseArgs(process.argv.slice(2));
   ensureLabels(args.labels, args.sample);
-  if (!args.answers) return;
+
+  // One answer for a whole run of blocks: --range=1-30 --answer=N
+  let answers = args.answers;
+  if (args.range && args.answer) {
+    const match = /^(\d+)-(\d+)$/.exec(args.range);
+    if (!match) throw new Error("--range must look like 1-30");
+    const from = Number(match[1]);
+    const to = Number(match[2]);
+    if (to < from) throw new Error(`--range end (${to}) is before its start (${from})`);
+    answers = [];
+    for (let n = from; n <= to; n += 1) answers.push(`${n}=${args.answer}`);
+    answers = answers.join(",");
+  }
+  if (!answers) {
+    console.log("nothing to apply: pass --answers=\"1=N,2=Y:forward\" or --range=1-30 --answer=N");
+    return;
+  }
 
   const ids = numberToId(packParts(args.pack));
-  const pairs = args.answers
+  const pairs = answers
     .split(",")
     .map((piece) => piece.trim())
     .filter(Boolean)
