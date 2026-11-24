@@ -13,9 +13,11 @@ Prints aggregates only. Per-doc detail goes to html_scan.json.
 """
 import json, os, re, sys, hashlib
 from html.parser import HTMLParser
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import f4_paths
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-RAW = os.path.join(HERE, "raw_html")
+RAW = f4_paths.RAW_HTML
 
 INVIS = set([0x00AD, 0x034F, 0x061C, 0x115F, 0x1160, 0x17B4, 0x17B5, 0x180E,
              0x200B, 0x200C, 0x200D, 0x200E, 0x200F, 0x202A, 0x202B, 0x202C, 0x202D, 0x202E,
@@ -240,7 +242,7 @@ def scan_doc(path):
 
 
 def main():
-    man = [json.loads(l) for l in open(os.path.join(HERE, "corpus_manifest.jsonl"), encoding="utf-8")]
+    man = [json.loads(l) for l in open(f4_paths.MANIFEST, encoding="utf-8")]
     out = []
     for r in man:
         try:
@@ -249,7 +251,7 @@ def main():
             s = {"error": repr(e)[:120]}
         s.update({k: r[k] for k in ("key", "ats", "board", "job_id", "url", "title")})
         out.append(s)
-    json.dump(out, open(os.path.join(HERE, "html_scan.json"), "w"), ensure_ascii=False, indent=1)
+    json.dump(out, open(f4_paths.data_path("html_scan.json"), "w"), ensure_ascii=False, indent=1)
 
     n = len(out)
     ok = [o for o in out if "error" not in o]

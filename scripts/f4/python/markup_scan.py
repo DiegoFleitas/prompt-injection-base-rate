@@ -9,24 +9,26 @@ Channels recorded per page (hash + length + stage-2 verdict only, never raw text
   dangling      elements whose text is only reachable via aria-label (no visible text)
 
 Sharded like render_runner2.py: --shard i --of n -> markup_scan.i.jsonl
+
+Safety: the page is the saved copy under $F4_DATA_DIR/raw_html, loaded with
+JavaScript disabled and every non-`file:` request aborted (safe_render.py); the
+live URL in the manifest is never visited.
 """
 import json, os, re, sys, glob, time, hashlib, argparse
 from playwright.sync_api import sync_playwright
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import stage2
+import f4_paths, stage2
+from safe_render import launch_offline_chromium, file_uri
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-EXE = sorted(glob.glob(os.path.expandvars(r"%LOCALAPPDATA%/ms-playwright/chromium-*/chrome-win64/chrome.exe")))[-1]
-UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-      "(KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36")
 
 ap = argparse.ArgumentParser(); ap.add_argument("--shard", type=int, default=0); ap.add_argument("--of", type=int, default=1)
 a = ap.parse_args()
-OUT = os.path.join(HERE, f"markup_scan.{a.shard}.jsonl")
+OUT = f4_paths.data_path(f"markup_scan.{a.shard}.jsonl")
 
-man = [json.loads(l) for l in open(os.path.join(HERE, "corpus_manifest.jsonl"), encoding="utf-8")]
+man = [json.loads(l) for l in open(f4_paths.MANIFEST, encoding="utf-8")]
 done = set()
-for f in glob.glob(os.path.join(HERE, "markup_scan*.jsonl")):
+for f in glob.glob(f4_paths.data_path("markup_scan*.jsonl")):
     for l in open(f, encoding="utf-8"):
         try:
             r = json.loads(l)
@@ -65,17 +67,17 @@ JS = r"""(() => {
 
 t0 = time.time(); ok = err = 0
 with sync_playwright() as pw:
-    br = pw.chromium.launch(headless=True, executable_path=EXE, args=["--disable-dev-shm-usage", "--disable-gpu"])
-    ctx = br.new_context(user_agent=UA, viewport={"width": 1280, "height": 900}, locale="en-US", javaScriptEnabled=False)
+    br, ctx = launch_offline_chromium(pw)
     page = ctx.new_page(); page.set_default_timeout(25000)
     with open(OUT, "a", encoding="utf-8") as fh:
         for m in todo:
             rec = {"key": m["key"], "ats": m["ats"]}
+            local = os.path.join(f4_paths.RAW_HTML, m["file"])
             for attempt in (1, 2):
                 try:
-                    page.route("**/*", lambda route, req: route.continue_() if (req.is_navigation_request() and req.url == m["url"]) else route.abort())
-                    page.goto(m["url"], wait_until="domcontentloaded", timeout=25000)
-                    page.unroute("**/*")
+                    if not os.path.exists(local):
+                        raise FileNotFoundError(local)
+                    page.goto(file_uri(local), wait_until="load", timeout=25000)
                     page.wait_for_timeout(400)
                     d = page.evaluate(JS)
                     rec["n_attr"] = len(d["attrs"])
