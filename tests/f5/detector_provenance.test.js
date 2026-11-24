@@ -76,6 +76,39 @@ test("every detectors.js require in the tree resolves inside the repository", ()
 
 test("make-sheet.js defaults its detector to the vendored copy", () => {
   const source = fs.readFileSync(path.join(REPO_ROOT, "scripts", "make-sheet.js"), "utf8");
-  assert.match(source, /arg\(\s*"detector"\s*,\s*path\.join\(\s*"vendor"\s*,\s*"detectors\.js"\s*\)\s*\)/);
+  const { resolveDetectorPath } = require(path.join(REPO_ROOT, "scripts", "make-sheet.js"));
+  assert.equal(resolveDetectorPath("vendor/detectors.js"), VENDORED_DETECTOR);
+  assert.equal(resolveDetectorPath(), VENDORED_DETECTOR);
   assert.doesNotMatch(source, /lemon-juice/);
+  assert.doesNotMatch(
+    source,
+    /require\(\s*["']vendor\/detectors\.js["']\s*\)/,
+    "a CWD-relative require cannot resolve the vendored detector"
+  );
+});
+
+test("a missing detector is an error, not a silent fallback", () => {
+  const { loadDetector } = require(path.join(REPO_ROOT, "scripts", "make-sheet.js"));
+  assert.throws(
+    () => loadDetector(path.join(REPO_ROOT, "vendor", "not-the-detector.js")),
+    (error) => error.code === "DETECTOR_UNAVAILABLE" && /detector not loadable/.test(error.message)
+  );
+  const source = fs.readFileSync(path.join(REPO_ROOT, "scripts", "make-sheet.js"), "utf8");
+  assert.doesNotMatch(source, /D1 falls back/, "the silent fallback message is back");
+  assert.match(source, /--allow-missing-detector/, "the explicit opt-out must be documented in code");
+});
+
+test("vendor/README.md's pin table matches the vendored bytes", () => {
+  const readme = fs.readFileSync(path.join(REPO_ROOT, "vendor", "README.md"), "utf8");
+  assert.ok(readme.includes(PINNED_SHA256), "README SHA-256 drifted from PINNED_SHA256");
+  assert.match(readme, /`v0\.11\.0`/, "README must name the upstream tag");
+  assert.match(readme, /`3ee8494677e9debca5222cd9812d2f1799093ede`/, "README must name the upstream commit");
+  const bytes = fs.readFileSync(VENDORED_DETECTOR, "utf8");
+  const lines = bytes.endsWith("\n") ? bytes.split("\n").length - 1 : bytes.split("\n").length;
+  assert.ok(readme.includes(`${lines} lines`), `README must record the ${lines}-line file`);
+});
+
+test(".nvmrc pins an exact Node version", () => {
+  const nvmrc = fs.readFileSync(path.join(REPO_ROOT, ".nvmrc"), "utf8").trim();
+  assert.match(nvmrc, /^\d+\.\d+\.\d+$/, `expected an exact version, got ${JSON.stringify(nvmrc)}`);
 });
