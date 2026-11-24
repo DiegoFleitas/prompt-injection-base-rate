@@ -19,6 +19,8 @@
  */
 
 const fs = require("fs");
+const path = require("path");
+const { verifyLabels } = require("./label-integrity");
 
 const SEED = 20261113;
 const REPLICAS = 2000;
@@ -385,6 +387,7 @@ function main() {
           "populations. Single annotator, no model pre-labelling.",
         ];
 
+  const labelIntegrity = verifyLabels(args.labels, path.join(path.dirname(args.labels), "corpus-manifest.csv"));
   const zeroCheck = cpUpper(0, 290);
   if (Math.abs(zeroCheck - 0.01027) > 0.0005) {
     throw new Error(`zero-count bound drift: 0/290 → ${zeroCheck}`);
@@ -394,6 +397,7 @@ function main() {
     frame: "F5",
     generated: "2026-11-13",
     protocol: "protocol-f5.md",
+    label_integrity: labelIntegrity,
     population: {
       messages_read: manifest.length,
       unique: manifest.length,

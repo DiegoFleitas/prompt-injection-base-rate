@@ -33,15 +33,17 @@ print(f"shard {a.shard}/{a.of}: good {len(done)} todo {len(todo)}", flush=True)
 t0 = time.time(); ok = err = 0
 with sync_playwright() as p:
     br = p.chromium.launch(headless=True, executable_path=EXE,
-                           args=["--disable-dev-shm-usage", "--no-sandbox", "--disable-gpu"])
-    ctx = br.new_context(user_agent=UA, viewport={"width": 1280, "height": 900}, locale="en-US")
+                           args=["--disable-dev-shm-usage", "--disable-gpu"])
+    ctx = br.new_context(user_agent=UA, viewport={"width": 1280, "height": 900}, locale="en-US", javaScriptEnabled=False)
     page = ctx.new_page(); page.set_default_timeout(25000)
     with open(OUT, "a", encoding="utf-8") as fh:
         for i, m in enumerate(todo):
             rec = {"key": m["key"], "ats": m["ats"], "board": m["board"]}
             for attempt in (1, 2):
                 try:
+                    page.route("**/*", lambda route, req: route.continue_() if (req.is_navigation_request() and req.url == m["url"]) else route.abort())
                     page.goto(m["url"], wait_until="domcontentloaded", timeout=25000)
+                    page.unroute("**/*")
                     page.wait_for_timeout(500)
                     r = page.evaluate(JS)
                     if r.get("inner", 0) < 400:

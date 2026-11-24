@@ -43,6 +43,9 @@ const N = Number(arg("n", "300"));
 const SEED = Number(arg("seed", "20261026"));
 const MIN_CHARS = Number(arg("min-chars", "200"));
 const OUT = arg("out", path.join("data", "wet-sample.jsonl"));
+const MAX_GZIP_BYTES = 32 * 1024 * 1024;
+const MAX_DECOMPRESSED_BYTES = 64 * 1024 * 1024;
+const MAX_RECORD_BYTES = 2 * 1024 * 1024;
 const CRAWL = arg("crawl", "");
 const MAX_FILES = Number(arg("max-files", "30"));
 // Records per file. Sampling one file only would cluster the sample in a single
@@ -78,7 +81,10 @@ async function wetPaths(crawlId) {
   const url = `${DATA_BASE}crawl-data/${crawlId}/wet.paths.gz`;
   const response = await fetch(url, { headers: { "user-agent": "lemon-juice-base-rate/1.0" } });
   if (!response.ok) throw new Error(`${url} -> HTTP ${response.status}`);
+  const declared = Number(response.headers.get("content-length") || 0);
+  if (declared > MAX_GZIP_BYTES) throw new Error(`compressed listing too large: ${declared}`);
   const gz = Buffer.from(await response.arrayBuffer());
+  if (gz.length > MAX_GZIP_BYTES) throw new Error(`compressed listing too large: ${gz.length}`);
   return zlib
     .gunzipSync(gz)
     .toString("utf8")
@@ -100,6 +106,8 @@ async function readWetFile(warcPath, wanted, onRecord) {
     headers: { "user-agent": "lemon-juice-base-rate/1.0" },
   });
   if (!response.ok) throw new Error(`${url} -> HTTP ${response.status}`);
+  const declaredWarc = Number(response.headers.get("content-length") || 0);
+  if (declaredWarc > MAX_GZIP_BYTES) { controller.abort(); throw new Error(`WARC too large: ${declaredWarc}`); }
 
   const gunzip = zlib.createGunzip();
   const stream = require("stream");
@@ -127,6 +135,7 @@ async function readWetFile(warcPath, wanted, onRecord) {
     headers = new Map();
     body = [];
     inHeaders = true;
+    if (Buffer.byteLength(text) > MAX_RECORD_BYTES) return false;
     if (!uri || text.length < MIN_CHARS) return false;
     taken += 1;
     onRecord({ uri, text });
@@ -134,9 +143,13 @@ async function readWetFile(warcPath, wanted, onRecord) {
   };
 
   let buffer = "";
+  let decompressedBytes = 0;
   try {
     for await (const chunk of gunzip) {
+      decompressedBytes += chunk.length;
+      if (decompressedBytes > MAX_DECOMPRESSED_BYTES) { controller.abort(); throw new Error("decompressed byte ceiling exceeded"); }
       buffer += chunk.toString("utf8");
+      if (buffer.length > MAX_RECORD_BYTES) { controller.abort(); throw new Error("line buffer ceiling exceeded"); }
       let newline;
       while ((newline = buffer.indexOf("\n")) >= 0) {
         const line = buffer.slice(0, newline).replace(/\r$/, "");
