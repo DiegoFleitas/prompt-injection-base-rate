@@ -139,7 +139,7 @@ function main() {
   const sheetDir = arg("sheet", "sheet");
   const labels = arg("labels", "labels.csv");
   const flags = arg("flags", path.join("data", "detector-flags.csv"));
-  const detectorFile = arg("detector", path.join("..", "lemon-juice", "detectors.js"));
+  const detectorFile = arg("detector", path.join("vendor", "detectors.js"));
   const maxDisplay = Number(arg("max-display", "6000"));
 
   const records = fs

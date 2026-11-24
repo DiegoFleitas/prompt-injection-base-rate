@@ -44,7 +44,7 @@ any of it carry an instruction with an action?**
 ```sh
 # in the VM, from the repo root
 node scripts/f4/fetch-pages.js --n=50 --out=data/f4/pages
-npm i --no-save playwright && npx playwright install chromium
+npm ci && npx playwright install chromium
 node scripts/f4/render-hidden.js --pages=data/f4/pages --out=data/f4/findings.jsonl
 node scripts/f4/summarize-f4.js --findings=data/f4/findings.jsonl --out=results/f4-<date>.md
 ```
