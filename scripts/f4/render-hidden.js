@@ -6,8 +6,9 @@
  *
  *   node scripts/f4/render-hidden.js --pages=data/f4/pages --out=data/f4/findings.jsonl
  *
- * Requires Playwright + Chromium in the VM (`npm i --no-save playwright` then
- * `npx playwright install chromium`). JavaScript is disabled and every HTTP(S)
+ * Requires Playwright + Chromium in the VM (`npm ci`, then
+ * `npx playwright install chromium`; both pinned by `package-lock.json`).
+ * JavaScript is disabled and every HTTP(S)
  * request is aborted, so a saved page cannot execute or phone home.
  *
  * Channels recorded: HTML comments, attributes (alt/title/aria/label/data-*,
@@ -112,7 +113,7 @@ async function main() {
   try {
     ({ chromium } = require("playwright"));
   } catch {
-    console.error("Playwright is not installed. In the VM: npm i --no-save playwright && npx playwright install chromium");
+    console.error("Playwright is not installed. In the VM: npm ci && npx playwright install chromium");
     process.exitCode = 1;
     return;
   }
