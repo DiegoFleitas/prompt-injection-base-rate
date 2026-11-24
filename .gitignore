@@ -10,3 +10,15 @@ report.md
 node_modules/
 __pycache__/
 *.pyc
+
+# F4 pipeline outputs — written to $F4_DATA_DIR outside the repo; these entries
+# are a backstop so a misconfigured run cannot stage third-party page text.
+scripts/f4/python/raw_html/
+scripts/f4/python/corpus_manifest.jsonl
+scripts/f4/python/render_scan*.jsonl
+scripts/f4/python/markup_scan*.jsonl
+scripts/f4/python/html_scan.json
+scripts/f4/python/render_summary.json
+scripts/f4/python/hidden_index.json
+scripts/f4/python/inject_results*.json
+scripts/f4/python/venv/

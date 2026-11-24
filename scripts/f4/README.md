@@ -13,6 +13,11 @@ not the JS-disabled `render-hidden.js` below on F1 URIs — both deviations are 
 `../../deviations.md`. The three JS scripts are kept as the scaffold for the
 WARC/JS-disabled variant, which has still never been run.
 
+As published now, the Python implementation renders each saved local copy with
+JavaScript disabled and every non-`file:` request aborted
+([`python/safe_render.py`](python/safe_render.py)); the 2026-11-10 numbers above
+remain the record of the run as it happened and are not restated as offline.
+
 ## Why this frame matters
 
 If the tool had any plausible value, it was here: a page can carry instructions

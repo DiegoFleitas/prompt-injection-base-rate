@@ -19,11 +19,15 @@ loads the live page with JavaScript enabled and reads computed style.
 | `selftest_render.py` | negative controls for the browser predicates (visible text, aria-hidden-but-visible, inherited colour) |
 | `payloads/` | the two independent payload sets used for the recall numbers |
 
-Requirements: Python 3.14, `playwright` (the Chromium build in
-`%LOCALAPPDATA%/ms-playwright` is reused; nothing else is downloaded).
+Requirements: Python 3.14 and the pinned `playwright==1.56.0` from
+[`requirements.txt`](../../../requirements.txt). Install it into the venv from
+that file — never as a global or unpinned `pip install` — and fetch the browser
+with `playwright install chromium` (or point `F4_CHROMIUM` at an existing
+Chromium binary).
 
 ```sh
-python -m venv venv && ./venv/Scripts/python.exe -m pip install playwright
+python -m venv venv && ./venv/Scripts/python.exe -m pip install -r ../../../requirements.txt
+./venv/Scripts/python.exe -m playwright install chromium
 ./venv/Scripts/python.exe fetch_boards.py 40
 for i in 0 1 2 3; do ./venv/Scripts/python.exe render_runner2.py --shard $i --of 4 & done; wait
 for i in 0 1 2 3; do ./venv/Scripts/python.exe markup_scan.py  --shard $i --of 4 & done; wait
@@ -32,8 +36,20 @@ for i in 0 1 2 3; do ./venv/Scripts/python.exe markup_scan.py  --shard $i --of 4
 ./venv/Scripts/python.exe inject_test.py payloads/payloads2.json   payloads/inject_results.set2.json
 ```
 
-Raw captures, the per-page scan records and the corpus manifest land in the
-working directory and are **not** published: they contain third-party page text.
+### Where the data goes, and how the browser runs
+
+Raw captures, the corpus manifest and the per-page scan records contain
+third-party page text and are **not** published. They are written outside the
+repository, under `$F4_DATA_DIR` (default `~/f4-data`); pointing `F4_DATA_DIR`
+inside the repo is a hard error (`f4_paths.py`). `.gitignore` also lists every
+historical in-tree location as a backstop.
+
+`render_runner2.py`, `markup_scan.py`, `inject_test.py` and `selftest_render.py`
+share one browser factory (`safe_render.py`): Chromium's sandbox stays on (no
+`--no-sandbox`), JavaScript is disabled, and a context-wide route aborts every
+request whose scheme is not `file:` — so the scans render the saved local copy
+and never re-fetch the live URL or let a page beacon. The static checks for
+these properties are in [`tests/f4/test_renderer_hardening.py`](../../../tests/f4/test_renderer_hardening.py).
 Only aggregates, SHA-256 prefixes and lengths are written into `results/`.
 
 Code in this directory is GPL-3.0, like the rest of the repository.

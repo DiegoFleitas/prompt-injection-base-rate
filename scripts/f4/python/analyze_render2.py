@@ -7,10 +7,11 @@ import json, glob, os, statistics, collections, hashlib, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
+import f4_paths
 import stage2
 
 rows, seen = [], set()
-for f in sorted(glob.glob(os.path.join(HERE, "render_scan*.jsonl"))):
+for f in sorted(glob.glob(f4_paths.data_path("render_scan*.jsonl"))):
     for l in open(f, encoding="utf-8"):
         try: r = json.loads(l)
         except Exception: continue
@@ -78,8 +79,8 @@ for a in sorted({r["ats"] for r in rows}):
     summary["by_ats"][a] = {"n": len(sub),
                             "hidden": sum(1 for r in sub if r.get("n_hidden", 0) > 0),
                             "stage2": sum(1 for r in sub if any(stage2.detect(x.get("text", ""))[0] for x in r.get("hidden", [])))}
-json.dump(summary, open(os.path.join(HERE, "render_summary.json"), "w"), indent=1)
-json.dump(sorted(idx.values(), key=lambda e: -e["docs"]), open(os.path.join(HERE, "hidden_index.json"), "w"), indent=1)
+json.dump(summary, open(f4_paths.data_path("render_summary.json"), "w"), indent=1)
+json.dump(sorted(idx.values(), key=lambda e: -e["docs"]), open(f4_paths.data_path("hidden_index.json"), "w"), indent=1)
 
 print(f"docs {n}")
 print(f"hidden  {len(docs_hidden):4} {100*len(docs_hidden)/max(n,1):5.1f}%  CI {[round(x,4) for x in summary['docs_hidden_ci']]}")

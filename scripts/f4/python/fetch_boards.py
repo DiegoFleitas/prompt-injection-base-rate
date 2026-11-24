@@ -4,6 +4,10 @@ Sampling: systematic from the API's own ordering (id-sorted), cap per board.
 Provenance recorded per posting: ats, board, job id, url, title, fetched_at,
 content sha256, byte size. Raw HTML kept for re-adjudication.
 
+Safety: raw HTML and the provenance manifest are written **outside the repo**,
+under $F4_DATA_DIR (default ~/f4-data), because they carry third-party page
+text and must never be committable. See f4_paths.py.
+
 Usage: python fetch_boards.py [cap_per_board] [boards_file]
 The board list is not published: it names the employers sampled. It lives in
 data/f4/boards.txt (git-ignored, one "ats board" per line), or the path given
@@ -12,10 +16,13 @@ board hash instead of the name.
 Prints digests only.
 """
 import json, os, sys, time, hashlib, urllib.request, urllib.error
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import f4_paths
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-RAW = os.path.join(HERE, "raw_html"); os.makedirs(RAW, exist_ok=True)
-MAN = os.path.join(HERE, "corpus_manifest.jsonl")
+f4_paths.ensure_data_dirs()
+RAW = f4_paths.RAW_HTML
+MAN = f4_paths.MANIFEST
 UA = {"User-Agent": "Mozilla/5.0 (academic base-rate measurement; local)"}
 CAP = int(sys.argv[1]) if len(sys.argv) > 1 else 40
 
