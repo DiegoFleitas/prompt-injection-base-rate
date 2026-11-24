@@ -57,7 +57,11 @@ the release is aggregates only.
 files, terms at <https://commoncrawl.org/terms-of-use>); OWASP LLM01: Prompt
 Injection for the threat taxonomy; the ACL-ARR checklist itself for this document.
 The detector used for the flag column is `lemon-juice` v0.11.0 (GPL-3.0,
-referenced in the README).
+referenced in the README): `DiegoFleitas/lemon-juice` @ tag `v0.11.0`, commit
+`3ee8494677e9debca5222cd9812d2f1799093ede`, vendored verbatim and pinned by
+SHA-256 in `vendor/README.md`; it is a local JavaScript file (no remote API, no
+model, no telemetry) and its hash is asserted by
+`tests/f5/detector_provenance.test.js`.
 
 Positive-control corpora, pinned by commit and recorded with sha256 in
 `data/sensitivity/provenance*.json`:
@@ -136,8 +140,11 @@ means "at most ~11%", 30/30 means "at least ~89%". Sampling variability **across
 crawls** is still unmeasured — one crawl was used.
 
 **C4. Existing packages reported? — Yes.** Nothing beyond the Node.js standard
-library (version recorded in the run log); no NLP or ML packages. The detector is
-imported from `lemon-juice` at v0.11.0. `scripts/sensitivity/` downloads the
+library (version recorded in the run log and pinned in `.nvmrc`, `24.16.0`); no
+NLP or ML packages. The detector is vendored from `lemon-juice` v0.11.0
+(commit `3ee8494`, SHA-256 pinned in `vendor/README.md`) and is loaded only from
+`vendor/detectors.js` inside this repository — no code is executed from outside
+it, and no detector is fetched at run time. `scripts/sensitivity/` downloads the
 pinned corpus files with `fetch` and parses them with `JSON.parse`; it executes no
 third-party code.
 

@@ -6,6 +6,11 @@
  *
  *   node make-sheet.js --in=data/wet-sample.jsonl --sheet=sheet --labels=labels.csv
  *
+ * The detector is vendored and pinned (`vendor/detectors.js`, provenance in
+ * `vendor/README.md`) and is required: the run aborts if it does not load.
+ * `--allow-missing-detector` is the explicit, documented opt-out for a D1-only
+ * run with no detector flag column.
+ *
  * Writes one text file per record with every invisible code point made visible,
  * a `labels.csv` template to annotate, and — separately, so the annotator never
  * sees it — `data/detector-flags.csv` with Lemon Juice's verdict. The join
@@ -125,12 +130,34 @@ function sheetText(record, summary, classifier, maxDisplay) {
   ].join("\n");
 }
 
+/**
+ * Resolve `--detector` (default `vendor/detectors.js`) against the repository
+ * root, not the current working directory. `require()` also needs a filesystem
+ * path: a bare `"vendor/detectors.js"` is read as a module name and fails, which
+ * the old silent fallback turned into a detector-less run.
+ */
+function resolveDetectorPath(detectorArg = "vendor/detectors.js") {
+  return path.resolve(__dirname, "..", detectorArg);
+}
+
+/**
+ * Load the vendored detector. SR-02: the detector is third-party (GPL-3.0) code
+ * vendored at `vendor/detectors.js` and pinned by content hash in
+ * `vendor/README.md` (upstream repo, tag, commit, sha256) — the run never
+ * executes code from outside this repository.
+ *
+ * A detector that does not load is an error, not a warning: the flag column and
+ * the TAG/VS/SNEAKY predicates come from it, so a silent null would publish a
+ * D1 number measured with a different instrument. The only way to run without
+ * it is the explicit `--allow-missing-detector` opt-out handled in main().
+ */
 function loadDetector(file) {
   try {
     return require(file);
   } catch (error) {
-    console.error(`warning: detector not loadable (${error.message}); D1 falls back`);
-    return null;
+    const wrapped = new Error(`detector not loadable: ${file} (${error.message})`);
+    wrapped.code = "DETECTOR_UNAVAILABLE";
+    throw wrapped;
   }
 }
 
@@ -139,8 +166,9 @@ function main() {
   const sheetDir = arg("sheet", "sheet");
   const labels = arg("labels", "labels.csv");
   const flags = arg("flags", path.join("data", "detector-flags.csv"));
-  const detectorFile = arg("detector", path.join("vendor", "detectors.js"));
+  const detectorFile = resolveDetectorPath(arg("detector", "vendor/detectors.js"));
   const maxDisplay = Number(arg("max-display", "6000"));
+  const allowMissingDetector = process.argv.includes("--allow-missing-detector");
 
   const records = fs
     .readFileSync(input, "utf8")
@@ -148,7 +176,21 @@ function main() {
     .filter(Boolean)
     .map((line) => JSON.parse(line));
 
-  const scanner = loadDetector(detectorFile);
+  let scanner;
+  try {
+    scanner = loadDetector(detectorFile);
+  } catch (error) {
+    if (!allowMissingDetector) {
+      console.error(`error: ${error.message}`);
+      console.error("The detector is vendored and pinned at vendor/detectors.js — see vendor/README.md.");
+      console.error("Restore it, or pass --allow-missing-detector to run D1 without the flag column.");
+      process.exit(2);
+    }
+    console.error(`warning: ${error.message}`);
+    console.error("--allow-missing-detector is set: no detector flag column is written and the");
+    console.error("TAG/VS/SNEAKY predicates use make-sheet.js's own fallbacks.");
+    scanner = null;
+  }
   const classifier = makeClassifier(scanner);
 
   fs.mkdirSync(sheetDir, { recursive: true });
@@ -211,6 +253,13 @@ function main() {
   console.log("until analysis — the prevalence number has to be blind.");
 }
 
-module.exports = { makeClassifier, invisibleSummary, visualize, sheetText };
+module.exports = {
+  makeClassifier,
+  invisibleSummary,
+  visualize,
+  sheetText,
+  resolveDetectorPath,
+  loadDetector,
+};
 
 if (require.main === module) main();
