@@ -59,7 +59,14 @@ const FILES = [
 ];
 
 async function download(url, file) {
-  if (fs.existsSync(file)) return fs.readFileSync(file);
+  if (fs.existsSync(file)) {
+    const cached = fs.readFileSync(file);
+    const expected = process.env.PI_EXPECTED_SHA256 || "";
+    if (expected && crypto.createHash("sha256").update(cached).digest("hex") !== expected.toLowerCase()) {
+      fs.unlinkSync(file);
+      console.error(`cache integrity mismatch; refetching ${file}`);
+    } else return cached;
+  };
   const res = await fetch(url);
   if (!res.ok) throw new Error(`${url} -> HTTP ${res.status}`);
   const buf = Buffer.from(await res.arrayBuffer());

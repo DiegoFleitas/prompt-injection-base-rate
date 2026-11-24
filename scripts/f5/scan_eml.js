@@ -25,7 +25,7 @@ const path = require("path");
 
 const { makeClassifier, invisibleSummary } = require("../make-sheet.js");
 const triage = require("../triage.js");
-const detector = require(path.join(__dirname, "..", "..", "..", "lemon-juice", "detectors.js"));
+const detector = require(path.join(__dirname, "..", "..", "vendor", "detectors.js"));
 
 const classifier = makeClassifier(detector);
 

@@ -1,0 +1,14 @@
+{
+  "name": "prompt-injection-base-rate",
+  "private": true,
+  "version": "1.0.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "playwright": "1.56.0"
+  },
+  "scripts": {
+    "test": "node --test tests/**/*.test.js"
+  }
+}

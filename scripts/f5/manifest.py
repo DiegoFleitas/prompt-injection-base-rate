@@ -16,6 +16,7 @@ message seen twice (mailbox + archive); the first occurrence wins and the count
 is reported, not written, so the manifest stays one row per message.
 """
 
+import os
 import argparse
 import csv
 import hashlib
@@ -99,7 +100,7 @@ def main(argv=None):
     args = parser.parse_args(argv)
 
     root = Path(args.root)
-    salt = Path(args.salt).read_text(encoding="utf-8").strip()
+    salt = Path(os.environ.get("PI_BASE_RATE_SALT", args.salt)).read_text(encoding="utf-8").strip()
     self_addresses = {
         line.strip().lower()
         for line in Path(args.self).read_text(encoding="utf-8").splitlines()

@@ -1,0 +1,6 @@
+data/
+sheet/
+labels.csv
+*.csv
+report.md
+node_modules/

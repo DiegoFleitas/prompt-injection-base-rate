@@ -14,7 +14,7 @@ const assert = require("node:assert");
 const path = require("path");
 
 const { makeClassifier, invisibleSummary } = require(path.join(__dirname, "..", "..", "scripts", "make-sheet.js"));
-const detector = require(path.join(__dirname, "..", "..", "..", "lemon-juice", "detectors.js"));
+const detector = require(path.join(__dirname, "..", "..", "vendor", "detectors.js"));
 const { excerpt, markerPositions } = require(path.join(__dirname, "..", "..", "scripts", "f5", "make_sheet.js"));
 
 const classifier = makeClassifier(detector);

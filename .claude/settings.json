@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "deny": [
+      "Read(data/**)",
+      "Read(sheet/**)",
+      "Read(**/*.csv)",
+      "Read(report.md)"
+    ]
+  }
+}

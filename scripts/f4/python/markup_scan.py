@@ -65,15 +65,17 @@ JS = r"""(() => {
 
 t0 = time.time(); ok = err = 0
 with sync_playwright() as pw:
-    br = pw.chromium.launch(headless=True, executable_path=EXE, args=["--disable-dev-shm-usage", "--no-sandbox", "--disable-gpu"])
-    ctx = br.new_context(user_agent=UA, viewport={"width": 1280, "height": 900}, locale="en-US")
+    br = pw.chromium.launch(headless=True, executable_path=EXE, args=["--disable-dev-shm-usage", "--disable-gpu"])
+    ctx = br.new_context(user_agent=UA, viewport={"width": 1280, "height": 900}, locale="en-US", javaScriptEnabled=False)
     page = ctx.new_page(); page.set_default_timeout(25000)
     with open(OUT, "a", encoding="utf-8") as fh:
         for m in todo:
             rec = {"key": m["key"], "ats": m["ats"]}
             for attempt in (1, 2):
                 try:
+                    page.route("**/*", lambda route, req: route.continue_() if (req.is_navigation_request() and req.url == m["url"]) else route.abort())
                     page.goto(m["url"], wait_until="domcontentloaded", timeout=25000)
+                    page.unroute("**/*")
                     page.wait_for_timeout(400)
                     d = page.evaluate(JS)
                     rec["n_attr"] = len(d["attrs"])
