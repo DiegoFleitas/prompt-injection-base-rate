@@ -1,1 +1,1 @@
-playwright==1.56.0
+playwright==1.56.0  # F4 render channel; pinned — install with pip -r, never unpinned

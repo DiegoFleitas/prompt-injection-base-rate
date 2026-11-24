@@ -15,12 +15,12 @@ Usage: python inject_test.py payloads.json
 """
 import json, os, re, sys, unicodedata, glob, tempfile
 from playwright.sync_api import sync_playwright
-import scan_html as S
-import stage2
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import f4_paths, scan_html as S, stage2
+from safe_render import launch_offline_chromium
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 JS = open(os.path.join(HERE, "render_pred.js"), encoding="utf-8").read()
-EXE = sorted(glob.glob(os.path.expandvars(r"%LOCALAPPDATA%/ms-playwright/chromium-*/chrome-win64/chrome.exe")))[-1]
 
 COVERED = {
  "display_none": '<div style="display:none">%s</div>',
@@ -48,7 +48,7 @@ def build(carrier, frag):
 
 def main(payload_file, out_file="inject_results.json"):
     pl = json.load(open(payload_file, encoding="utf-8"))
-    carriers = sorted(glob.glob(os.path.join(HERE, "raw_html", "*.html")))[:8]
+    carriers = sorted(glob.glob(os.path.join(f4_paths.RAW_HTML, "*.html")))[:8]
     carriers = [open(c, encoding="utf-8", errors="replace").read() for c in carriers]
     cases = []
     for i, p in enumerate(pl):
@@ -68,9 +68,7 @@ def main(payload_file, out_file="inject_results.json"):
 
     out = []
     with sync_playwright() as pw:
-        br = pw.chromium.launch(headless=True, executable_path=EXE,
-                                args=["--disable-dev-shm-usage", "--no-sandbox", "--disable-gpu"])
-        ctx = br.new_context(viewport={"width": 1280, "height": 900})
+        br, ctx = launch_offline_chromium(pw)
         page = ctx.new_page()
         for c in cases:
             html = build(carriers[c["carrier"]], c["frag"])
@@ -99,7 +97,7 @@ def main(payload_file, out_file="inject_results.json"):
             out.append(rec)
         br.close()
 
-    json.dump(out, open(os.path.join(HERE, out_file), "w"), ensure_ascii=False, indent=1)
+    json.dump(out, open(f4_paths.data_path(out_file), "w"), ensure_ascii=False, indent=1)
     # summary
     def rate(sub, key):
         return (sum(1 for r in sub if r.get(key)), len(sub))
