@@ -30,6 +30,16 @@ const MAX_BYTES = 2 * 1024 * 1024;
 const TIMEOUT_MS = 15000;
 const DELAY_MS = 1200;
 const UA = "prompt-injection-base-rate/1.0 (research; one request per URL)";
+const ALLOWED_HOSTS = new Set(["boards.greenhouse.io", "job-boards.greenhouse.io", "api.lever.co", "jobs.lever.co", "api.ashbyhq.com", "jobs.ashbyhq.com"]);
+function safeUrl(raw) {
+  const u = new URL(raw);
+  if (u.protocol !== "https:") throw new Error(`blocked non-https URL for ${recordId(raw)}`);
+  const host = u.hostname.toLowerCase();
+  if (![...ALLOWED_HOSTS].some((h) => host === h || host.endsWith("." + h))) throw new Error(`blocked host ${host}`);
+  if (u.username || u.password) throw new Error("blocked URL credentials");
+  return u;
+}
+function recordId(raw) { try { return new URL(raw).hostname; } catch { return "invalid"; } }
 
 function mulberry32(seed) {
   let a = seed >>> 0;
@@ -97,7 +107,9 @@ async function main() {
 
   let saved = 0;
   for (const record of picked) {
-    const allowed = await robotsAllows(record.uri);
+    let allowed = false;
+    try { safeUrl(record.uri); allowed = await robotsAllows(record.uri); }
+    catch (error) { manifest.write(`${JSON.stringify({ id: record.id, uri: record.uri, skipped: "blocked-url", reason: error.message })}\n`); continue; }
     await sleep(DELAY_MS);
     if (!allowed) {
       manifest.write(`${JSON.stringify({ id: record.id, uri: record.uri, robots: "disallowed" })}\n`);
@@ -107,7 +119,7 @@ async function main() {
 
     try {
       const response = await fetch(record.uri, {
-        redirect: "follow",
+        redirect: "error",
         headers: { "user-agent": UA, accept: "text/html" },
         signal: AbortSignal.timeout(TIMEOUT_MS),
       });

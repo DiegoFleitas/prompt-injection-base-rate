@@ -21,7 +21,7 @@ const path = require("path");
 const { makeClassifier, invisibleSummary, visualize } = require("./make-sheet.js");
 const { wilson } = require("./analyze.js");
 
-const detector = require(path.join(__dirname, "..", "..", "lemon-juice", "detectors.js"));
+const detector = require(path.join(__dirname, "..", "vendor", "detectors.js"));
 const classifier = makeClassifier(detector);
 
 function kindOf(ch) {
